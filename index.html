@@ -73,7 +73,7 @@
       overflow: hidden;
     }
     .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .hero-body {}
+
     .hero-role { font-size: 13px; color: var(--blue); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
     .hero h1 { font-size: 36px; font-weight: 600; color: var(--text); line-height: 1.2; margin-bottom: 12px; }
     .hero-bio { font-size: 15px; color: var(--muted); max-width: 540px; line-height: 1.75; margin-bottom: 24px; }
@@ -102,6 +102,31 @@
     }
     .stat-num { font-size: 26px; font-weight: 600; color: var(--blue); }
     .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── SCHOOL PROJECTS ── */
+    .school-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .school-card {
+      background: var(--bg2); border: 0.5px solid var(--border);
+      border-radius: 10px; padding: 20px 22px;
+      transition: border-color .2s, transform .2s;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .school-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+    .school-card-header { display: flex; align-items: center; gap: 10px; }
+    .school-icon { font-size: 20px; flex-shrink: 0; }
+    .school-subject {
+      font-size: 11px; color: var(--muted); font-family: monospace;
+      background: var(--bg3); border: 0.5px solid var(--border2);
+      padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+    }
+    .school-name { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; }
+    .school-desc { font-size: 12px; color: var(--muted); line-height: 1.6; flex: 1; }
+    .school-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+    .school-gh {
+      font-size: 12px; color: var(--blue); text-decoration: none;
+      font-family: monospace; transition: color .2s;
+    }
+    .school-gh:hover { text-decoration: underline; }
 
     /* ── SECTION ── */
     .section { margin-bottom: 72px; }
@@ -221,12 +246,13 @@
 <body>
 
 <nav>
-  <a href="#" class="nav-logo">lghthien.dev</a>
+  <a href="#" class="nav-logo">LGHT</a>
   <div style="display:flex;align-items:center;gap:20px;">
     <div class="nav-links">
       <a href="#skills">Skills</a>
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
+      <a href="#school-projects">School</a>
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-badge"><span class="dot-live"></span>Open to work</div>
@@ -238,7 +264,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="avatar-wrap">
-      <div class="avatar">LT</div>
+      <div class="avatar"><img src="/images/image.png" alt="Avatar"></div>
     </div>
     <div class="hero-body">
       <div class="hero-role">DevOps &amp; System Engineer</div>
@@ -255,7 +281,7 @@
 
   <!-- STATS -->
   <div class="stats">
-    <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Projects shipped</div></div>
+    <div class="stat"><div class="stat-num">13+</div><div class="stat-label">Projects shipped</div></div>
     <div class="stat"><div class="stat-num">9.0</div><div class="stat-label">GPA / 10</div></div>
     <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Security checks (CIS)</div></div>
     <div class="stat"><div class="stat-num">UIT</div><div class="stat-label">2022 – 2026</div></div>
@@ -469,6 +495,149 @@
         </div>
         <div class="proj-footer">
           <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="proj-gh">↗ View on GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SCHOOL PROJECTS -->
+  <section class="section" id="school-projects">
+    <div class="sec-title">Academic &amp; school projects</div>
+    <div class="school-grid">
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">📚</span>
+          <span class="school-subject">Intro to SE</span>
+        </div>
+        <div class="school-name">Library Management Website</div>
+        <div class="school-desc">Full-stack web application for managing library books, readers, loans, and fines. Built as the capstone for Introduction to Software Engineering.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">JavaScript</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/library-management-website" target="_blank" class="school-gh">↗ library-management-website</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">🌱</span>
+          <span class="school-subject">IoT</span>
+        </div>
+        <div class="school-name">Gardenice – Smart Garden IoT</div>
+        <div class="school-desc">IoT system to monitor and automate a smart garden: soil moisture, temperature, automated watering, and a mobile dashboard for control.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag orange">ESP32</span><span class="tag green">MQTT</span><span class="tag">Python</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/Gardenice-IoT" target="_blank" class="school-gh">↗ Gardenice-IoT</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">🌐</span>
+          <span class="school-subject">SDN / Programmable Networks</span>
+        </div>
+        <div class="school-name">SDN Multi-Access-Point Controller</div>
+        <div class="school-desc">Software-Defined Networking project implementing a centralised controller managing multiple Wi-Fi access points with dynamic flow routing.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag purple">OpenFlow</span><span class="tag">Ryu SDN</span><span class="tag">Python</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/SDN_multi-access-point" target="_blank" class="school-gh">↗ SDN_multi-access-point</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">🏨</span>
+          <span class="school-subject">Network Design</span>
+        </div>
+        <div class="school-name">Resort Network Design Project</div>
+        <div class="school-desc">End-to-end enterprise network design for a resort: VLAN segmentation, inter-VLAN routing, redundancy with STP/HSRP, and firewall policies.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag">Cisco</span><span class="tag orange">VLAN</span><span class="tag">OSPF</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/Network-Design-Project-Resort" target="_blank" class="school-gh">↗ Network-Design-Project-Resort</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">📱</span>
+          <span class="school-subject">Mobile App</span>
+        </div>
+        <div class="school-name">English Manager App</div>
+        <div class="school-desc">Mobile application for learning and managing English vocabulary. Features flashcards, progress tracking, and quiz modes built for Android.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag green">Android</span><span class="tag">Java</span><span class="tag">SQLite</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/App_EnglishManager" target="_blank" class="school-gh">↗ App_EnglishManager</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">🗺️</span>
+          <span class="school-subject">SE347 – Software Engineering</span>
+        </div>
+        <div class="school-name">SE347 Learning Roadmap</div>
+        <div class="school-desc">Web platform providing structured learning roadmaps and resources for software engineering topics, built as a team project for SE347.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag orange">REST API</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/SE347_Roadmap" target="_blank" class="school-gh">↗ SE347_Roadmap</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">⚙️</span>
+          <span class="school-subject">NT548 – DevOps</span>
+        </div>
+        <div class="school-name">NT548 DevOps Lab Practice</div>
+        <div class="school-desc">Hands-on DevOps lab exercises covering Docker, Kubernetes, CI/CD pipelines, and infrastructure-as-code using Terraform and GitHub Actions.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag orange">Terraform</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/NT548-DevOps-ThucHanh" target="_blank" class="school-gh">↗ NT548-DevOps-ThucHanh</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">🎲</span>
+          <span class="school-subject">Basic Network Programming</span>
+        </div>
+        <div class="school-name">Monopoly WinForms (LAN)</div>
+        <div class="school-desc">Multiplayer Monopoly board game built in C# WinForms with real-time LAN networking using TCP/IP sockets for peer-to-peer game state synchronisation.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag purple">C#</span><span class="tag">WinForms</span><span class="tag green">TCP/IP</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/Monopoly_winform" target="_blank" class="school-gh">↗ Monopoly_winform</a>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-card-header">
+          <span class="school-icon">🖥️</span>
+          <span class="school-subject">Network Programming</span>
+        </div>
+        <div class="school-name">Remote Desktop Tool</div>
+        <div class="school-desc">Custom remote desktop application allowing real-time screen sharing and keyboard/mouse control over a local network using socket programming in C#.</div>
+        <div class="tags" style="margin-bottom:4px;">
+          <span class="tag purple">C#</span><span class="tag">Sockets</span><span class="tag">RDP</span>
+        </div>
+        <div class="school-footer">
+          <a href="https://github.com/Lghthien/remotedesktop" target="_blank" class="school-gh">↗ remotedesktop</a>
         </div>
       </div>
 
