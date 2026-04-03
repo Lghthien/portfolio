@@ -1,19 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Le Gia Hoang Thien — DevOps Engineer</title>
+  <title>Le Gia Hoang Thien â€” DevOps Engineer</title>
   <meta name="description" content="Personal portfolio of Le Gia Hoang Thien, Intern DevOps & System Engineer from UIT." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <nav>
-  <a href="#" class="nav-logo">LGHT</a>
-  <div style="display:flex;align-items:center;gap:20px;">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="3" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M7 8l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="nav-logo-text">LGHT<span class="nav-logo-cursor">_</span></span>
+  </a>
+  <div class="nav-right">
     <div class="nav-links">
       <a href="#skills">Skills</a>
       <a href="#experience">Experience</a>
@@ -33,12 +43,12 @@
       <div class="avatar"><img src="/images/image.png" alt="Avatar"></div>
     </div>
     <div class="hero-body">
-      <div class="hero-role">DevOps &amp; System Engineer</div>
-      <h1>Le Gia Hoang Thien</h1>
-      <p class="hero-bio">
+      <div class="hero-role fade-in fade-in-1">DevOps &amp; System Engineer</div>
+      <h1 class="fade-in fade-in-2">Le Gia Hoang Thien</h1>
+      <p class="hero-bio fade-in fade-in-3">
         Final-year student at UIT with hands-on experience in CI/CD pipelines, cloud infrastructure on AWS, container orchestration, and security automation. Passionate about building reliable, observable, and secure systems.
       </p>
-      <div class="hero-btns">
+      <div class="hero-btns fade-in fade-in-4">
         <a href="mailto:lghthien@gmail.com" class="btn-primary">Contact me</a>
         <a href="https://github.com/Lghthien" target="_blank" class="btn-ghost">GitHub Profile</a>
       </div>
@@ -49,7 +59,7 @@
   <div class="stats">
     <div class="stat"><div class="stat-num">13+</div><div class="stat-label">Projects shipped</div></div>
     <div class="stat"><div class="stat-num">9.0</div><div class="stat-label">GPA / 10</div></div>
-    <div class="stat"><div class="stat-num">UIT</div><div class="stat-label">2022 – 2026</div></div>
+    <div class="stat"><div class="stat-num">UIT</div><div class="stat-label">2022 â€“ 2026</div></div>
   </div>
 
   <!-- EDUCATION -->
@@ -58,13 +68,13 @@
     <div class="edu-card">
       <div>
         <div class="edu-school">University of Information Technology (UIT)</div>
-        <div class="edu-major">Computer Networking and Data Communication &nbsp;·&nbsp; 2022 – 2026</div>
+        <div class="edu-major">Computer Networking and Data Communication &nbsp;Â·&nbsp; 2022 â€“ 2026</div>
       </div>
       <div class="edu-right">
         <div class="edu-gpa">9.0 / 10</div>
         <div class="edu-gpa-label">GPA</div>
         <a href="https://drive.google.com/drive/u/0/folders/1xKMrto-ASyM-d_nPMrZH9UWiTsmyk_X5"
-           target="_blank" class="edu-transcript">📄 View transcript</a>
+           target="_blank" class="edu-transcript">ðŸ“„ View transcript</a>
       </div>
     </div>
   </section>
@@ -134,70 +144,112 @@
   <!-- EXPERIENCE -->
   <section class="section" id="experience">
     <div class="sec-title">Experience</div>
-    <div class="timeline">
+    <div class="exp-grid">
 
-      <div class="exp-item">
-        <div class="exp-dot"></div>
-        <div class="exp-date">Aug 2025 – Feb 2026</div>
-        <div class="exp-title">Open-Source SIEM System Development</div>
-        <div class="exp-sub">Intern Project</div>
+      <div class="exp-card reveal">
+        <div class="exp-card-header">
+          <div class="exp-card-left">
+            <div class="exp-icon-box" style="background:rgba(88,166,255,0.1);border-color:rgba(88,166,255,0.25);">ðŸ›¡ï¸</div>
+            <div>
+              <div class="exp-type-badge badge-intern">Intern Project</div>
+              <div class="exp-card-date">Aug 2025 â€“ Feb 2026</div>
+            </div>
+          </div>
+          <div class="exp-card-num">01</div>
+        </div>
+        <div class="exp-card-title">Open-Source SIEM System Development</div>
         <ul class="exp-bullets">
-          <li>Designed and deployed an open-source SIEM platform using OpenSearch, Wazuh, and Vector in Docker-based environments.</li>
-          <li>Built log collection pipelines for multi-source data (Linux, Windows, Firewall, Web, Docker, ESXi) and standardized logs using ECS.</li>
-          <li>Implemented parsing, filtering, tagging, and transformation with Vector (VRL); optimized performance and resolved production issues (memory leaks, high load).</li>
-          <li>Deployed HA architecture with OpenSearch Cluster, NGINX Load Balancer, and automated agent installation with failover support.</li>
+          <li>Designed and deployed a full SIEM platform using OpenSearch, Wazuh, and Vector in Docker.</li>
+          <li>Built log pipelines for 6+ source types (Linux, Windows, Firewall, Docker, ESXi) with ECS normalization.</li>
+          <li>Implemented Vector (VRL) transformations; resolved production issues including memory leaks and high load.</li>
+          <li>Deployed HA cluster with NGINX load balancer and automated failover agent installation.</li>
         </ul>
-        <div class="exp-links">
-          <a href="https://github.com/Lghthien/Deploy-SIEM-opensource" target="_blank" class="exp-link">⎇ Deploy-SIEM-opensource</a>
+        <div class="exp-card-footer">
+          <div class="tags">
+            <span class="tag purple">OpenSearch</span><span class="tag purple">Wazuh</span><span class="tag">Docker</span><span class="tag green">Vector</span>
+          </div>
+          <a href="https://github.com/Lghthien/Deploy-SIEM-opensource" target="_blank" class="exp-link">âŽ‡ Deploy-SIEM-opensource</a>
         </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-dot"></div>
-        <div class="exp-date">Oct 2025 – Nov 2025</div>
-        <div class="exp-title">NGINX CIS Benchmark Automation Tool</div>
-        <div class="exp-sub">Personal Project</div>
+      <div class="exp-card reveal">
+        <div class="exp-card-header">
+          <div class="exp-card-left">
+            <div class="exp-icon-box" style="background:rgba(240,136,62,0.1);border-color:rgba(240,136,62,0.25);">ðŸ”’</div>
+            <div>
+              <div class="exp-type-badge badge-personal">Personal Project</div>
+              <div class="exp-card-date">Oct 2025 â€“ Nov 2025</div>
+            </div>
+          </div>
+          <div class="exp-card-num">02</div>
+        </div>
+        <div class="exp-card-title">NGINX CIS Benchmark Automation Tool</div>
         <ul class="exp-bullets">
-          <li>Developed an automation tool to harden and audit NGINX compliance with CIS Benchmark on Ubuntu servers via SSH.</li>
-          <li>Implemented 40+ security checks (TLS, permissions, logging, request filtering) and automated secure SSL/TLS configuration.</li>
-          <li>Supported multi-host deployment, backup/rollback mechanisms, and generated detailed JSON compliance reports (PASS/FAIL with remediation).</li>
+          <li>Built automation tool to harden & audit NGINX against CIS Benchmark via SSH on Ubuntu servers.</li>
+          <li>Implemented 40+ security checks: TLS config, permissions, logging, request filtering.</li>
+          <li>Added multi-host support, backup/rollback, and JSON compliance reports with remediation steps.</li>
         </ul>
-        <div class="exp-links">
-          <a href="https://github.com/Lghthien/Nginx_automation" target="_blank" class="exp-link">⎇ Nginx_automation</a>
+        <div class="exp-card-footer">
+          <div class="tags">
+            <span class="tag orange">Python</span><span class="tag green">NGINX</span><span class="tag">Ubuntu</span>
+          </div>
+          <a href="https://github.com/Lghthien/Nginx_automation" target="_blank" class="exp-link">âŽ‡ Nginx_automation</a>
         </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-dot"></div>
-        <div class="exp-date">Mar 2025 – Jun 2025</div>
-        <div class="exp-title">CI/CD Pipeline with Jenkins for Web Application</div>
-        <div class="exp-sub">Academic Project</div>
+      <div class="exp-card reveal">
+        <div class="exp-card-header">
+          <div class="exp-card-left">
+            <div class="exp-icon-box" style="background:rgba(63,185,80,0.1);border-color:rgba(63,185,80,0.25);">âš™ï¸</div>
+            <div>
+              <div class="exp-type-badge badge-academic">Academic Project</div>
+              <div class="exp-card-date">Mar 2025 â€“ Jun 2025</div>
+            </div>
+          </div>
+          <div class="exp-card-num">03</div>
+        </div>
+        <div class="exp-card-title">CI/CD Pipeline with Jenkins for Web App</div>
         <ul class="exp-bullets">
-          <li>Developed a travel website using NestJS (backend) and NextJS (frontend), containerized with Docker.</li>
-          <li>Provisioned a Jenkins server on AWS EC2 using Terraform for CI/CD automation.</li>
-          <li>Integrated Trivy for Docker image security scanning and SonarQube for code quality analysis.</li>
-          <li>Deployed applications using ArgoCD for GitOps-based continuous delivery.</li>
-          <li>Monitored and visualized system metrics with Prometheus and Grafana.</li>
+          <li>Built NestJS + NextJS travel app containerized with Docker, deployed on AWS EKS.</li>
+          <li>Provisioned Jenkins CI server on EC2 via Terraform; integrated Trivy & SonarQube.</li>
+          <li>Implemented GitOps delivery with ArgoCD; monitoring via Prometheus + Grafana.</li>
         </ul>
-        <div class="exp-links">
-          <a href="https://github.com/Lghthien/CI-dacn" target="_blank" class="exp-link">⎇ CI-dacn</a>
-          <a href="https://github.com/Lghthien/infrastructure" target="_blank" class="exp-link">⎇ infrastructure</a>
+        <div class="exp-card-footer">
+          <div class="tags">
+            <span class="tag">Jenkins</span><span class="tag green">ArgoCD</span><span class="tag orange">Terraform</span>
+          </div>
+          <div class="exp-links" style="margin-top:0;">
+            <a href="https://github.com/Lghthien/CI-dacn" target="_blank" class="exp-link">âŽ‡ CI-dacn</a>
+            <a href="https://github.com/Lghthien/infrastructure" target="_blank" class="exp-link">âŽ‡ infrastructure</a>
+          </div>
         </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-dot"></div>
-        <div class="exp-date">Mar 2025 – May 2025</div>
-        <div class="exp-title">Automated Website Deployment on AWS</div>
-        <div class="exp-sub">Academic Project</div>
+      <div class="exp-card reveal">
+        <div class="exp-card-header">
+          <div class="exp-card-left">
+            <div class="exp-icon-box" style="background:rgba(88,166,255,0.1);border-color:rgba(88,166,255,0.25);">â˜ï¸</div>
+            <div>
+              <div class="exp-type-badge badge-academic">Academic Project</div>
+              <div class="exp-card-date">Mar 2025 â€“ May 2025</div>
+            </div>
+          </div>
+          <div class="exp-card-num">04</div>
+        </div>
+        <div class="exp-card-title">Automated Website Deployment on AWS</div>
         <ul class="exp-bullets">
-          <li>Developed a student management web application and provisioned cloud infrastructure on AWS with Terraform.</li>
-          <li>Leveraged AWS native CI/CD tools: CodeCommit, CodeBuild, and CodeDeploy for automated deployments.</li>
-          <li>Implemented high availability using Elastic Load Balancer and Auto Scaling Groups.</li>
+          <li>Built a student management web app; provisioned full AWS infra with Terraform IaC.</li>
+          <li>Automated deployments via CodeCommit, CodeBuild, and CodeDeploy pipeline.</li>
+          <li>Achieved high availability with Elastic Load Balancer and Auto Scaling Groups.</li>
         </ul>
-        <div class="exp-links">
-          <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="exp-link">⎇ infrastructure_devops</a>
-          <a href="https://github.com/Lghthien/Source-Dev-ops" target="_blank" class="exp-link">⎇ Source-Dev-ops</a>
+        <div class="exp-card-footer">
+          <div class="tags">
+            <span class="tag orange">Terraform</span><span class="tag">AWS</span><span class="tag">CodeDeploy</span>
+          </div>
+          <div class="exp-links" style="margin-top:0;">
+            <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="exp-link">âŽ‡ infrastructure_devops</a>
+            <a href="https://github.com/Lghthien/Source-Dev-ops" target="_blank" class="exp-link">âŽ‡ Source-Dev-ops</a>
+          </div>
         </div>
       </div>
 
@@ -209,9 +261,9 @@
     <div class="sec-title">Featured projects</div>
     <div class="proj-grid">
 
-      <div class="proj-card">
+      <div class="proj-card reveal">
         <div class="proj-card-top">
-          <div class="proj-icon">🛡️</div>
+          <div class="proj-icon">ðŸ›¡ï¸</div>
         </div>
         <div class="proj-name">Open-Source SIEM System</div>
         <div class="proj-desc">Full SIEM platform with OpenSearch + Wazuh + Vector. HA cluster, multi-source log pipelines, ECS normalization, and automated agent deployment.</div>
@@ -219,13 +271,13 @@
           <span class="tag purple">OpenSearch</span><span class="tag purple">Wazuh</span><span class="tag">Docker</span>
         </div>
         <div class="proj-footer">
-          <a href="https://github.com/Lghthien/Deploy-SIEM-opensource" target="_blank" class="proj-gh">↗ View on GitHub</a>
+          <a href="https://github.com/Lghthien/Deploy-SIEM-opensource" target="_blank" class="proj-gh">â†— View on GitHub</a>
         </div>
       </div>
 
-      <div class="proj-card">
+      <div class="proj-card reveal">
         <div class="proj-card-top">
-          <div class="proj-icon">🔒</div>
+          <div class="proj-icon">ðŸ”’</div>
         </div>
         <div class="proj-name">NGINX CIS Benchmark Tool</div>
         <div class="proj-desc">Automated hardening & auditing tool for NGINX on Ubuntu via SSH. 40+ CIS checks, SSL automation, backup/rollback, JSON compliance reports.</div>
@@ -233,13 +285,13 @@
           <span class="tag orange">Python</span><span class="tag green">NGINX</span><span class="tag">Ubuntu</span>
         </div>
         <div class="proj-footer">
-          <a href="https://github.com/Lghthien/Nginx_automation" target="_blank" class="proj-gh">↗ View on GitHub</a>
+          <a href="https://github.com/Lghthien/Nginx_automation" target="_blank" class="proj-gh">â†— View on GitHub</a>
         </div>
       </div>
 
-      <div class="proj-card">
+      <div class="proj-card reveal">
         <div class="proj-card-top">
-          <div class="proj-icon">⚙️</div>
+          <div class="proj-icon">âš™ï¸</div>
         </div>
         <div class="proj-name">Full DevSecOps Pipeline</div>
         <div class="proj-desc">End-to-end CI/CD for a NestJS + NextJS app on AWS EKS. Jenkins + Trivy + SonarQube + ArgoCD + Prometheus/Grafana stack.</div>
@@ -247,13 +299,13 @@
           <span class="tag">Jenkins</span><span class="tag green">ArgoCD</span><span class="tag orange">Terraform</span>
         </div>
         <div class="proj-footer">
-          <a href="https://github.com/Lghthien/CI-dacn" target="_blank" class="proj-gh">↗ View on GitHub</a>
+          <a href="https://github.com/Lghthien/CI-dacn" target="_blank" class="proj-gh">â†— View on GitHub</a>
         </div>
       </div>
 
-      <div class="proj-card">
+      <div class="proj-card reveal">
         <div class="proj-card-top">
-          <div class="proj-icon">☁️</div>
+          <div class="proj-icon">â˜ï¸</div>
         </div>
         <div class="proj-name">AWS Infrastructure Automation</div>
         <div class="proj-desc">Student management app deployed on AWS with Terraform IaC, CodePipeline CI/CD, Elastic Load Balancer, and Auto Scaling for high availability.</div>
@@ -261,7 +313,7 @@
           <span class="tag orange">Terraform</span><span class="tag">AWS</span><span class="tag">CodeDeploy</span>
         </div>
         <div class="proj-footer">
-          <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="proj-gh">↗ View on GitHub</a>
+          <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="proj-gh">â†— View on GitHub</a>
         </div>
       </div>
 
@@ -273,9 +325,9 @@
     <div class="sec-title">Academic &amp; school projects</div>
     <div class="school-grid">
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">📚</span>
+          <span class="school-icon">ðŸ“š</span>
           <span class="school-subject">Intro to SE</span>
         </div>
         <div class="school-name">Library Management Website</div>
@@ -284,28 +336,28 @@
           <span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">JavaScript</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/library-management-website" target="_blank" class="school-gh">↗ library-management-website</a>
+          <a href="https://github.com/Lghthien/library-management-website" target="_blank" class="school-gh">â†— library-management-website</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">🌱</span>
+          <span class="school-icon">ðŸŒ±</span>
           <span class="school-subject">IoT</span>
         </div>
-        <div class="school-name">Gardenice – Smart Garden IoT</div>
+        <div class="school-name">Gardenice â€“ Smart Garden IoT</div>
         <div class="school-desc">IoT system to monitor and automate a smart garden: soil moisture, temperature, automated watering, and a mobile dashboard for control.</div>
         <div class="tags" style="margin-bottom:4px;">
           <span class="tag orange">ESP32</span><span class="tag green">MQTT</span><span class="tag">Python</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/Gardenice-IoT" target="_blank" class="school-gh">↗ Gardenice-IoT</a>
+          <a href="https://github.com/Lghthien/Gardenice-IoT" target="_blank" class="school-gh">â†— Gardenice-IoT</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">🌐</span>
+          <span class="school-icon">ðŸŒ</span>
           <span class="school-subject">SDN / Programmable Networks</span>
         </div>
         <div class="school-name">SDN Multi-Access-Point Controller</div>
@@ -314,13 +366,13 @@
           <span class="tag purple">OpenFlow</span><span class="tag">Ryu SDN</span><span class="tag">Python</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/SDN_multi-access-point" target="_blank" class="school-gh">↗ SDN_multi-access-point</a>
+          <a href="https://github.com/Lghthien/SDN_multi-access-point" target="_blank" class="school-gh">â†— SDN_multi-access-point</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">🏨</span>
+          <span class="school-icon">ðŸ¨</span>
           <span class="school-subject">Network Design</span>
         </div>
         <div class="school-name">Resort Network Design Project</div>
@@ -329,13 +381,13 @@
           <span class="tag">Cisco</span><span class="tag orange">VLAN</span><span class="tag">OSPF</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/Network-Design-Project-Resort" target="_blank" class="school-gh">↗ Network-Design-Project-Resort</a>
+          <a href="https://github.com/Lghthien/Network-Design-Project-Resort" target="_blank" class="school-gh">â†— Network-Design-Project-Resort</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">📱</span>
+          <span class="school-icon">ðŸ“±</span>
           <span class="school-subject">Mobile App</span>
         </div>
         <div class="school-name">English Manager App</div>
@@ -344,14 +396,14 @@
           <span class="tag green">Android</span><span class="tag">Java</span><span class="tag">SQLite</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/App_EnglishManager" target="_blank" class="school-gh">↗ App_EnglishManager</a>
+          <a href="https://github.com/Lghthien/App_EnglishManager" target="_blank" class="school-gh">â†— App_EnglishManager</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">🗺️</span>
-          <span class="school-subject">SE347 – Software Engineering</span>
+          <span class="school-icon">ðŸ—ºï¸</span>
+          <span class="school-subject">SE347 â€“ Software Engineering</span>
         </div>
         <div class="school-name">SE347 Learning Roadmap</div>
         <div class="school-desc">Web platform providing structured learning roadmaps and resources for software engineering topics, built as a team project for SE347.</div>
@@ -359,14 +411,14 @@
           <span class="tag">React</span><span class="tag">Node.js</span><span class="tag orange">REST API</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/SE347_Roadmap" target="_blank" class="school-gh">↗ SE347_Roadmap</a>
+          <a href="https://github.com/Lghthien/SE347_Roadmap" target="_blank" class="school-gh">â†— SE347_Roadmap</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">⚙️</span>
-          <span class="school-subject">NT548 – DevOps</span>
+          <span class="school-icon">âš™ï¸</span>
+          <span class="school-subject">NT548 â€“ DevOps</span>
         </div>
         <div class="school-name">NT548 DevOps Lab Practice</div>
         <div class="school-desc">Hands-on DevOps lab exercises covering Docker, Kubernetes, CI/CD pipelines, and infrastructure-as-code using Terraform and GitHub Actions.</div>
@@ -374,13 +426,13 @@
           <span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag orange">Terraform</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/NT548-DevOps-ThucHanh" target="_blank" class="school-gh">↗ NT548-DevOps-ThucHanh</a>
+          <a href="https://github.com/Lghthien/NT548-DevOps-ThucHanh" target="_blank" class="school-gh">â†— NT548-DevOps-ThucHanh</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">🎲</span>
+          <span class="school-icon">ðŸŽ²</span>
           <span class="school-subject">Basic Network Programming</span>
         </div>
         <div class="school-name">Monopoly WinForms (LAN)</div>
@@ -389,13 +441,13 @@
           <span class="tag purple">C#</span><span class="tag">WinForms</span><span class="tag green">TCP/IP</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/Monopoly_winform" target="_blank" class="school-gh">↗ Monopoly_winform</a>
+          <a href="https://github.com/Lghthien/Monopoly_winform" target="_blank" class="school-gh">â†— Monopoly_winform</a>
         </div>
       </div>
 
-      <div class="school-card">
+      <div class="school-card reveal">
         <div class="school-card-header">
-          <span class="school-icon">🖥️</span>
+          <span class="school-icon">ðŸ–¥ï¸</span>
           <span class="school-subject">Network Programming</span>
         </div>
         <div class="school-name">Remote Desktop Tool</div>
@@ -404,7 +456,7 @@
           <span class="tag purple">C#</span><span class="tag">Sockets</span><span class="tag">RDP</span>
         </div>
         <div class="school-footer">
-          <a href="https://github.com/Lghthien/remotedesktop" target="_blank" class="school-gh">↗ remotedesktop</a>
+          <a href="https://github.com/Lghthien/remotedesktop" target="_blank" class="school-gh">â†— remotedesktop</a>
         </div>
       </div>
 
@@ -437,8 +489,79 @@
 </div>
 
 <footer>
-  <p>Designed &amp; built by Le Gia Hoang Thien &nbsp;·&nbsp; 2025</p>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <span class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="3" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 8l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>LGHT<span class="nav-logo-cursor">_</span></span>
+      </a>
+      <p class="footer-tagline">DevOps &amp; System Engineer<br><span>Final-year @ UIT Â· Ho Chi Minh City</span></p>
+      <div class="footer-socials">
+        <a href="mailto:lghthien@gmail.com" class="footer-social" title="Email">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </a>
+        <a href="https://github.com/Lghthien" target="_blank" class="footer-social" title="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85 0 1.71.11 2.51.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
+        </a>
+        <a href="tel:+84398860701" class="footer-social" title="Phone">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-links-group">
+      <div class="footer-col">
+        <div class="footer-col-title">Navigate</div>
+        <a href="#skills">Tech Stack</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#school-projects">School</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">GitHub Repos</div>
+        <a href="https://github.com/Lghthien/Deploy-SIEM-opensource" target="_blank">Deploy-SIEM</a>
+        <a href="https://github.com/Lghthien/Nginx_automation" target="_blank">Nginx Automation</a>
+        <a href="https://github.com/Lghthien/CI-dacn" target="_blank">CI/CD Pipeline</a>
+        <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank">AWS IaC</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>Â© 2025 Le Gia Hoang Thien</span>
+    <span class="footer-sep">Â·</span>
+    <span>Designed &amp; built with â¤ï¸</span>
+    <span class="footer-sep">Â·</span>
+    <span>Ho Chi Minh City, Vietnam</span>
+  </div>
 </footer>
+<!-- Ambient background blobs -->
+<div class="bg-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
+
+
+
