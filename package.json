@@ -2,7 +2,7 @@
   "name": "portfolio",
   "version": "1.0.0",
   "description": "Le Gia Hoang Thien — Portfolio CMS with MongoDB Atlas",
-  "main": "server.js",
+  "main": "api/index.js",
   "scripts": {
     "start": "echo 'Deploying on Vercel... use Vercel CLI locally'",
     "dev": "vercel dev",

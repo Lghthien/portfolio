@@ -6,19 +6,22 @@ if (!process.env.MONGODB_URI) {
   process.exit(1);
 }
 
-// ── Schema ────────────────────────────────────────
-const portfolioSchema = new mongoose.Schema({
-  _id:          { type: String, default: 'main' },
-  hero:         { type: mongoose.Schema.Types.Mixed, default: {} },
-  stats:        { type: [mongoose.Schema.Types.Mixed], default: [] },
-  education:    { type: mongoose.Schema.Types.Mixed, default: {} },
-  skills:       { type: [mongoose.Schema.Types.Mixed], default: [] },
-  experience:   { type: [mongoose.Schema.Types.Mixed], default: [] },
-  projects:     { type: [mongoose.Schema.Types.Mixed], default: [] },
-  schoolProjects: { type: [mongoose.Schema.Types.Mixed], default: [] },
-}, { strict: false });
+// ── Schemas ───────────────────────────────────────
+const heroSchema = new mongoose.Schema({ _id: { type: String, default: 'hero' } }, { strict: false });
+const statSchema = new mongoose.Schema({}, { strict: false });
+const educationSchema = new mongoose.Schema({ _id: { type: String, default: 'education' } }, { strict: false });
+const skillSchema = new mongoose.Schema({ id: String }, { strict: false });
+const experienceSchema = new mongoose.Schema({ id: String }, { strict: false });
+const projectSchema = new mongoose.Schema({ id: String }, { strict: false });
+const schoolProjectSchema = new mongoose.Schema({ id: String }, { strict: false });
 
-const Portfolio = mongoose.model('Portfolio', portfolioSchema);
+const Hero = mongoose.model('Hero', heroSchema);
+const Stat = mongoose.model('Stat', statSchema);
+const Education = mongoose.model('Education', educationSchema);
+const Skill = mongoose.model('Skill', skillSchema);
+const Experience = mongoose.model('Experience', experienceSchema);
+const Project = mongoose.model('Project', projectSchema);
+const SchoolProject = mongoose.model('SchoolProject', schoolProjectSchema);
 
 // ── Default Portfolio Data ─────────────────────────
 const defaultData = {
@@ -186,11 +189,30 @@ async function runSeed() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB Atlas!');
 
-    // Upsert to ensure we update existing 'main' doc if it's already there
-    console.log('📦 Seeding original portfolio data...');
-    await Portfolio.findByIdAndUpdate('main', defaultData, { upsert: true, returnDocument: 'after', overwrite: true });
+    console.log('🗑  Clearing old collections...');
+    await Promise.all([
+      Hero.deleteMany({}),
+      Education.deleteMany({}),
+      Stat.deleteMany({}),
+      Skill.deleteMany({}),
+      Experience.deleteMany({}),
+      Project.deleteMany({}),
+      SchoolProject.deleteMany({}),
+      mongoose.connection.collection('portfolios').drop().catch(() => {})
+    ]);
 
-    console.log('✅ Default data successfully seeded/overwritten to MongoDB!');
+    console.log('📦 Seeding portfolio database with new CMS tables...');
+    await Promise.all([
+      Hero.create({ ...defaultData.hero, _id: 'hero' }),
+      Education.create({ ...defaultData.education, _id: 'education' }),
+      Stat.insertMany(defaultData.stats),
+      Skill.insertMany(defaultData.skills),
+      Experience.insertMany(defaultData.experience),
+      Project.insertMany(defaultData.projects),
+      SchoolProject.insertMany(defaultData.schoolProjects)
+    ]);
+
+    console.log('✅ All collections successfully seeded to MongoDB!');
     process.exit(0);
   } catch (err) {
     console.error('❌ Error seeding data:', err.message);

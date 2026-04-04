@@ -73,13 +73,47 @@ const PortfolioDB = (() => {
     return _cache || {};
   }
 
-  /**
-   * Save the full portfolio object to MongoDB Atlas.
-   */
-  async function saveData(data) {
-    _cache = { ...data };
-    return _put('/portfolio', data);
+  // ── UPDATE HELPERS ────────────────────────────────
+  async function _updateCacheField(route, field, data) {
+    await _put(`/${route}`, data);
+    if (_cache) _cache[field] = data;
   }
+
+  async function _createItem(route, field, data) {
+    await _post(`/${route}`, data);
+    if (_cache) _cache[field].unshift(data);
+  }
+
+  async function _updateItem(route, field, id, data) {
+    await _put(`/${route}/${id}`, data);
+    if (_cache) {
+      const idx = _cache[field].findIndex(i => i.id === id);
+      if (idx > -1) _cache[field][idx] = data;
+    }
+  }
+
+  async function _deleteItem(route, field, id) {
+    const r = await fetch(API_BASE + `/${route}/${id}`, { method: 'DELETE', headers: _headers() });
+    if (!r.ok) throw new Error(await r.text());
+    if (_cache) _cache[field] = _cache[field].filter(i => i.id !== id);
+  }
+
+  const saveHero      = (d) => _updateCacheField('hero', 'hero', d);
+  const saveEducation = (d) => _updateCacheField('education', 'education', d);
+  const saveStats     = (d) => _updateCacheField('stats', 'stats', d);
+  const saveSkills    = (d) => _updateCacheField('skills', 'skills', d);
+
+  const createProject = (d) => _createItem('projects', 'projects', d);
+  const updateProject = (id, d) => _updateItem('projects', 'projects', id, d);
+  const deleteProject = (id) => _deleteItem('projects', 'projects', id);
+
+  const createExperience = (d) => _createItem('experience', 'experience', d);
+  const updateExperience = (id, d) => _updateItem('experience', 'experience', id, d);
+  const deleteExperience = (id) => _deleteItem('experience', 'experience', id);
+
+  const createSchoolProject = (d) => _createItem('school-projects', 'schoolProjects', d);
+  const updateSchoolProject = (id, d) => _updateItem('school-projects', 'schoolProjects', id, d);
+  const deleteSchoolProject = (id) => _deleteItem('school-projects', 'schoolProjects', id);
 
   /**
    * Reset portfolio to server-side defaults.
@@ -262,7 +296,11 @@ const PortfolioDB = (() => {
   // ─────────────────────────────────────────
   return {
     // Async (MongoDB)
-    fetchData, saveData, resetData,
+    fetchData, resetData,
+    saveHero, saveEducation, saveStats, saveSkills,
+    createProject, updateProject, deleteProject,
+    createExperience, updateExperience, deleteExperience,
+    createSchoolProject, updateSchoolProject, deleteSchoolProject,
     login, logout, isLoggedIn, changePassword,
     render,
     // Sync cache read (for admin.js)

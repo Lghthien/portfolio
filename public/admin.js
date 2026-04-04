@@ -125,7 +125,7 @@ $('save-hero').onclick = async () => {
     email: val('h-email'), phone: val('h-phone'), github: val('h-github'),
     avatar: val('h-avatar'), openToWork: $('h-open').checked, techTags: [...currentTags] };
   try {
-    await PortfolioDB.saveData(d);
+    await PortfolioDB.saveHero(d.hero);
     toast('✅ Hero saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
@@ -146,7 +146,7 @@ $('save-stats').onclick = async () => {
   const d = PortfolioDB.getData();
   d.stats = d.stats.map((_, i) => ({ num: val(`stat-num-${i}`), label: val(`stat-lbl-${i}`) }));
   try {
-    await PortfolioDB.saveData(d);
+    await PortfolioDB.saveStats(d.stats);
     toast('✅ Stats saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
@@ -164,7 +164,7 @@ $('save-edu').onclick = async () => {
   d.education = { school: val('edu-school'), major: val('edu-major'), years: val('edu-years'),
                   gpa: val('edu-gpa'), transcriptUrl: val('edu-url') };
   try {
-    await PortfolioDB.saveData(d);
+    await PortfolioDB.saveEducation(d.education);
     toast('✅ Education saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
@@ -197,27 +197,27 @@ async function addSkillTag(gi) {
   const d = PortfolioDB.getData();
   const [label, color=''] = val2.split(':').map(s=>s.trim());
   d.skills[gi].tags.push({ label, color });
-  await PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveSkills(d.skills); loadSkills(d.skills);
   setTimeout(() => { const el = $(`sg-input-${gi}`); if(el) el.focus(); }, 10);
 }
 async function removeSkillTag(gi, ti) {
   const d = PortfolioDB.getData(); d.skills[gi].tags.splice(ti,1);
-  await PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveSkills(d.skills); loadSkills(d.skills);
 }
 async function removeSkillGroup(gi) {
   const d = PortfolioDB.getData(); d.skills.splice(gi,1);
-  await PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveSkills(d.skills); loadSkills(d.skills);
 }
 $('add-skill-group').onclick = async () => {
   const d = PortfolioDB.getData();
   d.skills.push({ id: uid(), category: 'New Category', tags: [] });
-  await PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveSkills(d.skills); loadSkills(d.skills);
 };
 $('save-skills').onclick = async () => {
   const d = PortfolioDB.getData();
   d.skills.forEach((g, gi) => { const el = $(`sg-cat-${gi}`); if(el) g.category = el.value.trim(); });
   try {
-    await PortfolioDB.saveData(d);
+    await PortfolioDB.saveSkills(d.skills);
     toast('✅ Skills saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
@@ -286,28 +286,28 @@ $('add-link-btn').onclick = () => {
   $('em-links').appendChild(div);
 };
 $('save-exp-btn').onclick = async () => {
-  const d = PortfolioDB.getData();
   const bullets = [...$('em-bullets').querySelectorAll('textarea')].map(t=>t.value.trim()).filter(Boolean);
   const linkEls = [...$('em-links').querySelectorAll('.link-item')];
   const links = linkEls.map(el => {
     const ins = el.querySelectorAll('input');
     return { label: ins[0].value.trim(), url: ins[1].value.trim() };
   }).filter(l=>l.label||l.url);
-  const item = { id: editingId || uid(), date: val('em-date'), title: val('em-title'),
-    badge: $('em-badge').value, badgeLabel: val('em-badgeLabel'), bullets, links };
-  if (editingId) { const i = d.experience.findIndex(x=>x.id===editingId); d.experience[i]=item; }
-  else d.experience.unshift(item);
   try {
-    await PortfolioDB.saveData(d);
-    loadExp(d.experience); closeModal('exp-modal'); toast('✅ Experience saved!');
+    if (editingId) {
+      const item = { id: editingId, date: val('em-date'), title: val('em-title'), badge: $('em-badge').value, badgeLabel: val('em-badgeLabel'), bullets, links };
+      await PortfolioDB.updateExperience(editingId, item);
+    } else {
+      const item = { id: uid(), date: val('em-date'), title: val('em-title'), badge: $('em-badge').value, badgeLabel: val('em-badgeLabel'), bullets, links };
+      await PortfolioDB.createExperience(item);
+    }
+    loadExp(PortfolioDB.getData().experience); closeModal('exp-modal'); toast('✅ Experience saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 async function deleteExp(id) {
   if (!confirm('Delete this entry?')) return;
-  const d = PortfolioDB.getData(); d.experience = d.experience.filter(x=>x.id!==id);
   try {
-    await PortfolioDB.saveData(d);
-    loadExp(d.experience); toast('🗑 Deleted');
+    await PortfolioDB.deleteExperience(id);
+    loadExp(PortfolioDB.getData().experience); toast('🗑 Deleted');
   } catch(e) { toast('❌ Delete failed', true); }
 }
 function editExp(id) { openExpModal(id); }
@@ -347,22 +347,22 @@ function openProjModal(id) {
   openModal('proj-modal');
 }
 $('save-proj-btn').onclick = async () => {
-  const d = PortfolioDB.getData();
-  const item = { id: editingId||uid(), icon: val('pm-icon'), name: val('pm-name'),
-    desc: val('pm-desc'), github: val('pm-github'), tags: parseTags($('pm-tags').value) };
-  if (editingId) { const i = d.projects.findIndex(x=>x.id===editingId); d.projects[i]=item; }
-  else d.projects.unshift(item);
   try {
-    await PortfolioDB.saveData(d);
-    loadProjects(d.projects); closeModal('proj-modal'); toast('✅ Project saved!');
+    if (editingId) {
+      const item = { id: editingId, icon: val('pm-icon'), name: val('pm-name'), desc: val('pm-desc'), github: val('pm-github'), tags: parseTags($('pm-tags').value) };
+      await PortfolioDB.updateProject(editingId, item);
+    } else {
+      const item = { id: uid(), icon: val('pm-icon'), name: val('pm-name'), desc: val('pm-desc'), github: val('pm-github'), tags: parseTags($('pm-tags').value) };
+      await PortfolioDB.createProject(item);
+    }
+    loadProjects(PortfolioDB.getData().projects); closeModal('proj-modal'); toast('✅ Project saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 async function deleteProj(id) {
   if (!confirm('Delete this project?')) return;
-  const d = PortfolioDB.getData(); d.projects = d.projects.filter(x=>x.id!==id);
   try {
-    await PortfolioDB.saveData(d);
-    loadProjects(d.projects); toast('🗑 Deleted');
+    await PortfolioDB.deleteProject(id);
+    loadProjects(PortfolioDB.getData().projects); toast('🗑 Deleted');
   } catch(e) { toast('❌ Delete failed', true); }
 }
 function editProj(id) { openProjModal(id); }
@@ -402,23 +402,22 @@ function openSchoolModal(id) {
   openModal('school-modal');
 }
 $('save-school-btn').onclick = async () => {
-  const d = PortfolioDB.getData();
-  const item = { id: editingId||uid(), icon: val('sm-icon'), subject: val('sm-subject'),
-    name: val('sm-name'), desc: val('sm-desc'), github: val('sm-github'),
-    githubLabel: val('sm-label'), tags: parseTags($('sm-tags').value) };
-  if (editingId) { const i = d.schoolProjects.findIndex(x=>x.id===editingId); d.schoolProjects[i]=item; }
-  else d.schoolProjects.unshift(item);
   try {
-    await PortfolioDB.saveData(d);
-    loadSchool(d.schoolProjects); closeModal('school-modal'); toast('✅ School project saved!');
+    if (editingId) {
+      const item = { id: editingId, icon: val('sm-icon'), subject: val('sm-subject'), name: val('sm-name'), desc: val('sm-desc'), github: val('sm-github'), githubLabel: val('sm-label'), tags: parseTags($('sm-tags').value) };
+      await PortfolioDB.updateSchoolProject(editingId, item);
+    } else {
+      const item = { id: uid(), icon: val('sm-icon'), subject: val('sm-subject'), name: val('sm-name'), desc: val('sm-desc'), github: val('sm-github'), githubLabel: val('sm-label'), tags: parseTags($('sm-tags').value) };
+      await PortfolioDB.createSchoolProject(item);
+    }
+    loadSchool(PortfolioDB.getData().schoolProjects); closeModal('school-modal'); toast('✅ School project saved!');
   } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 async function deleteSchool(id) {
   if (!confirm('Delete this project?')) return;
-  const d = PortfolioDB.getData(); d.schoolProjects = d.schoolProjects.filter(x=>x.id!==id);
   try {
-    await PortfolioDB.saveData(d);
-    loadSchool(d.schoolProjects); toast('🗑 Deleted');
+    await PortfolioDB.deleteSchoolProject(id);
+    loadSchool(PortfolioDB.getData().schoolProjects); toast('🗑 Deleted');
   } catch(e) { toast('❌ Delete failed', true); }
 }
 function editSchool(id) { openSchoolModal(id); }

@@ -30,19 +30,22 @@ mongoose.connect(process.env.MONGODB_URI)
     process.exit(1);
   });
 
-// ── Schema ────────────────────────────────────────
-const portfolioSchema = new mongoose.Schema({
-  _id:          { type: String, default: 'main' },
-  hero:         { type: mongoose.Schema.Types.Mixed, default: {} },
-  stats:        { type: [mongoose.Schema.Types.Mixed], default: [] },
-  education:    { type: mongoose.Schema.Types.Mixed, default: {} },
-  skills:       { type: [mongoose.Schema.Types.Mixed], default: [] },
-  experience:   { type: [mongoose.Schema.Types.Mixed], default: [] },
-  projects:     { type: [mongoose.Schema.Types.Mixed], default: [] },
-  schoolProjects: { type: [mongoose.Schema.Types.Mixed], default: [] },
-}, { strict: false });
+// ── Schemas ───────────────────────────────────────
+const heroSchema = new mongoose.Schema({ _id: { type: String, default: 'hero' } }, { strict: false });
+const statSchema = new mongoose.Schema({}, { strict: false });
+const educationSchema = new mongoose.Schema({ _id: { type: String, default: 'education' } }, { strict: false });
+const skillSchema = new mongoose.Schema({ id: String }, { strict: false });
+const experienceSchema = new mongoose.Schema({ id: String }, { strict: false });
+const projectSchema = new mongoose.Schema({ id: String }, { strict: false });
+const schoolProjectSchema = new mongoose.Schema({ id: String }, { strict: false });
 
-const Portfolio = mongoose.model('Portfolio', portfolioSchema);
+const Hero = mongoose.model('Hero', heroSchema);
+const Stat = mongoose.model('Stat', statSchema);
+const Education = mongoose.model('Education', educationSchema);
+const Skill = mongoose.model('Skill', skillSchema);
+const Experience = mongoose.model('Experience', experienceSchema);
+const Project = mongoose.model('Project', projectSchema);
+const SchoolProject = mongoose.model('SchoolProject', schoolProjectSchema);
 
 // ── Auth Schema ────────────────────────────────────
 const authSchema = new mongoose.Schema({
@@ -225,9 +228,17 @@ function generateToken() {
 
 // ── Seed DB on first run ──────────────────────────
 async function seedIfEmpty() {
-  const exist = await Portfolio.findById('main');
+  const exist = await Hero.findById('hero');
   if (!exist) {
-    await Portfolio.create(defaultData);
+    await Promise.all([
+      Hero.create({ ...defaultData.hero, _id: 'hero' }),
+      Stat.insertMany(defaultData.stats),
+      Education.create({ ...defaultData.education, _id: 'education' }),
+      Skill.insertMany(defaultData.skills),
+      Experience.insertMany(defaultData.experience),
+      Project.insertMany(defaultData.projects),
+      SchoolProject.insertMany(defaultData.schoolProjects)
+    ]);
     console.log('📦 Default portfolio data seeded to MongoDB');
   }
 
@@ -337,31 +348,115 @@ app.post('/api/auth/change-password', requireAuth, async (req, res) => {
 // GET /api/portfolio — read all data (public, no auth)
 app.get('/api/portfolio', async (req, res) => {
   try {
-    let data = await Portfolio.findById('main').lean();
-    if (!data) data = defaultData;
-    delete data.__v;
-    res.json(data);
+    const [hero, stats, education, skills, experience, projects, schoolProjects] = await Promise.all([
+      Hero.findById('hero').lean(),
+      Stat.find().lean(),
+      Education.findById('education').lean(),
+      Skill.find().lean(),
+      Experience.find().lean(),
+      Project.find().lean(),
+      SchoolProject.find().lean(),
+    ]);
+
+    if (!hero) {
+      delete defaultData._id;
+      return res.json(defaultData);
+    }
+
+    const clean = Array.isArray(stats) ? (docs) => docs.map(d => { delete d._id; delete d.__v; return d; }) : () => [];
+    
+    let h = hero || {}; delete h._id; delete h.__v;
+    let ed = education || {}; delete ed._id; delete ed.__v;
+
+    res.json({
+      hero: h,
+      stats: clean(stats || []),
+      education: ed,
+      skills: clean(skills || []),
+      experience: clean(experience || []),
+      projects: clean(projects || []),
+      schoolProjects: clean(schoolProjects || [])
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-// PUT /api/portfolio — save all data (admin only)
-app.put('/api/portfolio', requireAuth, async (req, res) => {
+// ── REST APIs cho từng mục (Admin only) ──
+
+app.put('/api/hero', requireAuth, async (req, res) => {
   try {
-    const data = req.body;
-    data._id = 'main';
-    await Portfolio.findByIdAndUpdate('main', data, { upsert: true, returnDocument: 'after' });
+    await Hero.findByIdAndUpdate('hero', req.body, { upsert: true });
     res.json({ ok: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
+
+app.put('/api/education', requireAuth, async (req, res) => {
+  try {
+    await Education.findByIdAndUpdate('education', req.body, { upsert: true });
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/stats', requireAuth, async (req, res) => {
+  try {
+    await Stat.deleteMany({});
+    await Stat.insertMany(req.body);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.put('/api/skills', requireAuth, async (req, res) => {
+  try {
+    await Skill.deleteMany({});
+    await Skill.insertMany(req.body);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── CRUD Helpers cho các danh sách có Modal ──
+function createCrudRoutes(path, Model) {
+  app.post(`/api/${path}`, requireAuth, async (req, res) => {
+    try { await Model.create(req.body); res.json({ ok: true }); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+  });
+  app.put(`/api/${path}/:id`, requireAuth, async (req, res) => {
+    try { await Model.findOneAndUpdate({ id: req.params.id }, req.body, { upsert: true }); res.json({ ok: true }); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+  });
+  app.delete(`/api/${path}/:id`, requireAuth, async (req, res) => {
+    try { await Model.findOneAndDelete({ id: req.params.id }); res.json({ ok: true }); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+  });
+}
+
+createCrudRoutes('projects', Project);
+createCrudRoutes('experience', Experience);
+createCrudRoutes('school-projects', SchoolProject);
 
 // POST /api/portfolio/reset — reset to defaults (admin only)
 app.post('/api/portfolio/reset', requireAuth, async (req, res) => {
   try {
-    await Portfolio.findByIdAndReplace('main', defaultData, { upsert: true });
+    await Promise.all([
+      Hero.deleteMany({}),
+      Education.deleteMany({}),
+      Stat.deleteMany({}),
+      Skill.deleteMany({}),
+      Experience.deleteMany({}),
+      Project.deleteMany({}),
+      SchoolProject.deleteMany({})
+    ]);
+
+    await Promise.all([
+      Hero.create({ ...defaultData.hero, _id: 'hero' }),
+      Education.create({ ...defaultData.education, _id: 'education' }),
+      Stat.insertMany(defaultData.stats),
+      Skill.insertMany(defaultData.skills),
+      Experience.insertMany(defaultData.experience),
+      Project.insertMany(defaultData.projects),
+      SchoolProject.insertMany(defaultData.schoolProjects)
+    ]);
+
     res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
