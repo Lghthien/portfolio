@@ -188,7 +188,7 @@ async function runSeed() {
 
     // Upsert to ensure we update existing 'main' doc if it's already there
     console.log('📦 Seeding original portfolio data...');
-    await Portfolio.findByIdAndUpdate('main', defaultData, { upsert: true, new: true, overwrite: true });
+    await Portfolio.findByIdAndUpdate('main', defaultData, { upsert: true, returnDocument: 'after', overwrite: true });
 
     console.log('✅ Default data successfully seeded/overwritten to MongoDB!');
     process.exit(0);

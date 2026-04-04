@@ -351,7 +351,7 @@ app.put('/api/portfolio', requireAuth, async (req, res) => {
   try {
     const data = req.body;
     data._id = 'main';
-    await Portfolio.findByIdAndUpdate('main', data, { upsert: true, new: true });
+    await Portfolio.findByIdAndUpdate('main', data, { upsert: true, returnDocument: 'after' });
     res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
