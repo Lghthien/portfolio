@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin — LGHT Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+      --border: #30363d; --border2: #444c56;
+      --accent: #58a6ff; --accent2: #1f6feb;
+      --green: #3fb950; --orange: #f0883e; --purple: #bc8cff; --red: #f85149;
+      --text: #e6edf3; --text2: #8b949e; --text3: #6e7681;
+      --radius: 10px; --sidebar: 230px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; background: radial-gradient(ellipse at 50% 0%, #1f6feb22 0%, transparent 60%);
+    }
+    .login-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px 40px; width: 380px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.6);
+    }
+    .login-logo { font-size: 28px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+    .login-sub  { font-size: 13px; color: var(--text2); margin-bottom: 32px; }
+    .login-err  { background: rgba(248,81,73,.12); border: 1px solid rgba(248,81,73,.4);
+                  border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 16px; display: none; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; letter-spacing: .5px; text-transform: uppercase; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 12px; color: var(--text);
+      font-size: 14px; font-family: inherit; transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 8px;
+           font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+    .btn-primary { background: var(--accent2); color: #fff; width: 100%; justify-content: center; }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-danger { background: rgba(248,81,73,.15); color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+    .btn-danger:hover { background: rgba(248,81,73,.25); }
+    .btn-success { background: rgba(63,185,80,.15); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+    .btn-success:hover { background: rgba(63,185,80,.25); }
+    .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
+
+    /* ── LAYOUT ── */
+    #app { display: none; }
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar);
+      background: var(--bg2); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 22px 20px 16px; font-size: 18px; font-weight: 700;
+      color: var(--accent); border-bottom: 1px solid var(--border); letter-spacing: -.3px;
+    }
+    .sidebar-logo span { color: var(--text2); font-weight: 400; font-size: 11px; display: block; margin-top: 2px; }
+    .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+      border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
+      color: var(--text2); transition: all .15s; margin-bottom: 2px; border: none;
+      background: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { background: var(--bg3); color: var(--text); }
+    .nav-item.active { background: rgba(88,166,255,.12); color: var(--accent); }
+    .nav-item .icon { font-size: 15px; width: 18px; text-align: center; }
+    .sidebar-footer { padding: 14px 10px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+    .sidebar-footer a { color: var(--text2); font-size: 12px; text-decoration: none; padding: 6px 12px; border-radius: 6px; display: block; }
+    .sidebar-footer a:hover { background: var(--bg3); color: var(--accent); }
+
+    .main { margin-left: var(--sidebar); padding: 32px 36px; min-height: 100vh; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .page-desc { font-size: 13px; color: var(--text2); margin-bottom: 28px; }
+
+    /* ── CARDS / ITEMS ── */
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .card-title { font-size: 14px; font-weight: 600; }
+    .card-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .tag-chip {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px;
+      border-radius: 20px; font-size: 11px; font-weight: 500; border: 1px solid var(--border);
+      background: var(--bg3); color: var(--text2); margin: 2px;
+    }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge.intern  { background: rgba(88,166,255,.15); color: var(--accent); }
+    .badge.personal{ background: rgba(63,185,80,.15);  color: var(--green); }
+    .badge.academic{ background: rgba(240,136,62,.15); color: var(--orange); }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      z-index: 200; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--bg2); border: 1px solid var(--border2); border-radius: 14px;
+      width: min(680px, 95vw); max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,.7);
+      transform: translateY(20px); transition: transform .2s;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0;
+      background: var(--bg2); z-index: 1;
+    }
+    .modal-head h3 { font-size: 15px; font-weight: 700; }
+    .modal-close { background: none; border: none; color: var(--text2); font-size: 20px; cursor: pointer; line-height: 1; }
+    .modal-close:hover { color: var(--text); }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; background: var(--bg3);
+      border: 1px solid var(--green); border-radius: 10px; padding: 12px 20px;
+      font-size: 13px; font-weight: 500; color: var(--green); z-index: 999;
+      transform: translateY(20px); opacity: 0; transition: all .3s; pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { border-color: var(--red); color: var(--red); }
+
+    /* ── GRID ROW ── */
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .bullet-list { list-style: none; }
+    .bullet-item { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+    .bullet-item textarea { flex: 1; }
+    .bullet-item .btn { margin-top: 0; flex-shrink: 0; padding: 6px 10px; }
+    #add-bullet-btn { margin-top: 6px; }
+
+    /* ── TAG EDITOR ── */
+    .tag-editor { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; min-height: 44px; }
+    .tag-editor input { background: none; border: none; color: var(--text); font-size: 13px; flex: 1; min-width: 80px; outline: none; }
+    .tag-chip-del { cursor: pointer; opacity: .5; font-size: 12px; }
+    .tag-chip-del:hover { opacity: 1; }
+
+    /* ── STATS GRID ── */
+    .stats-inline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+    /* ── SECTION SELECT ── */
+    select option { background: var(--bg2); }
+
+    /* ── SKILL GROUP ── */
+    .skill-group-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+    .sg-head-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .sg-head-row input { background: none; border: none; border-bottom: 1px solid var(--border2); color: var(--text); font-size: 13px; font-weight: 600; width: 200px; padding: 2px 0; outline: none; }
+    .sg-head-row input:focus { border-color: var(--accent); }
+
+    /* ── LINK LIST ── */
+    .link-item { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .link-item input { flex: 1; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">⚙️ LGHT Admin</div>
+    <div class="login-sub">Portfolio Content Manager</div>
+    <div class="login-err" id="login-err">Incorrect username or password.</div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <button class="btn btn-primary" id="login-btn" style="margin-top:8px;">Sign in</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sidebar-logo">LGHT_ <span>Admin Panel</span></div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="hero">   <span class="icon">👤</span> Hero & Info</button>
+      <button class="nav-item" data-page="stats">         <span class="icon">📊</span> Stats</button>
+      <button class="nav-item" data-page="education">     <span class="icon">🎓</span> Education</button>
+      <button class="nav-item" data-page="skills">        <span class="icon">🛠️</span> Skills</button>
+      <button class="nav-item" data-page="experience">    <span class="icon">💼</span> Experience</button>
+      <button class="nav-item" data-page="projects">      <span class="icon">🚀</span> Projects</button>
+      <button class="nav-item" data-page="school">        <span class="icon">📚</span> School Projects</button>
+      <button class="nav-item" data-page="settings">      <span class="icon">⚙️</span> Settings</button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="index.html" target="_blank">↗ View portfolio</a>
+      <a href="#" id="logout-btn">⏻ Logout</a>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="page active" id="page-hero">
+      <div class="page-title">Hero & Contact Info</div>
+      <div class="page-desc">Update your name, bio, tech tags and contact links.</div>
+      <div class="card">
+        <div class="row2">
+          <div class="form-group"><label>Full Name</label><input type="text" id="h-name"/></div>
+          <div class="form-group"><label>Role / Title</label><input type="text" id="h-role"/></div>
+        </div>
+        <div class="form-group"><label>Bio</label><textarea id="h-bio" rows="4"></textarea></div>
+        <div class="form-group">
+          <label>Tech Tags (press Enter to add)</label>
+          <div class="tag-editor" id="h-tags-editor">
+            <input type="text" id="h-tag-input" placeholder="Add tag & press Enter…"/>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="form-group"><label>Email</label><input type="email" id="h-email"/></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="h-phone"/></div>
+        </div>
+        <div class="form-group"><label>GitHub URL</label><input type="url" id="h-github"/></div>
+        <div class="form-group"><label>Avatar Path</label><input type="text" id="h-avatar"/></div>
+        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+          <input type="checkbox" id="h-open" style="width:auto;accent-color:var(--accent);"/>
+          <label for="h-open" style="margin:0;text-transform:none;font-size:13px;color:var(--text);">Show "Open to work" badge</label>
+        </div>
+        <button class="btn btn-primary" id="save-hero" style="margin-top:8px;">💾 Save Hero</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="page" id="page-stats">
+      <div class="page-title">Stats</div>
+      <div class="page-desc">The 3 stats shown below your hero section.</div>
+      <div class="card">
+        <div class="stats-inline" id="stats-list"></div>
+        <button class="btn btn-primary" id="save-stats" style="margin-top:20px;">💾 Save Stats</button>
+      </div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="page" id="page-education">
+      <div class="page-title">Education</div>
+      <div class="page-desc">Your university and GPA details.</div>
+      <div class="card">
+        <div class="form-group"><label>School</label><input type="text" id="edu-school"/></div>
+        <div class="row2">
+          <div class="form-group"><label>Major</label><input type="text" id="edu-major"/></div>
+          <div class="form-group"><label>Years</label><input type="text" id="edu-years"/></div>
+        </div>
+        <div class="row2">
+          <div class="form-group"><label>GPA (number only)</label><input type="text" id="edu-gpa"/></div>
+          <div class="form-group"><label>Transcript URL</label><input type="url" id="edu-url"/></div>
+        </div>
+        <button class="btn btn-primary" id="save-edu">💾 Save Education</button>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="page" id="page-skills">
+      <div class="page-title">Skills</div>
+      <div class="page-desc">Manage skill groups and tags. Tag format: <code style="color:var(--accent);font-size:11px;">Label:color</code> (color: green/orange/purple or blank)</div>
+      <div id="skills-list"></div>
+      <button class="btn btn-secondary" id="add-skill-group" style="margin-bottom:16px;">+ Add Group</button>
+      <button class="btn btn-primary" id="save-skills">💾 Save Skills</button>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="page" id="page-experience">
+      <div class="page-title">Experience</div>
+      <div class="page-desc">Timeline entries. Drag order not supported — reorder by adding in order.</div>
+      <button class="btn btn-secondary" id="add-exp-btn" style="margin-bottom:18px;">+ Add Experience</button>
+      <div id="exp-list"></div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="page" id="page-projects">
+      <div class="page-title">Featured Projects</div>
+      <div class="page-desc">Cards shown in the Projects section.</div>
+      <button class="btn btn-secondary" id="add-proj-btn" style="margin-bottom:18px;">+ Add Project</button>
+      <div id="proj-list"></div>
+    </div>
+
+    <!-- SCHOOL -->
+    <div class="page" id="page-school">
+      <div class="page-title">School Projects</div>
+      <div class="page-desc">Academic project cards.</div>
+      <button class="btn btn-secondary" id="add-school-btn" style="margin-bottom:18px;">+ Add School Project</button>
+      <div id="school-list"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="page-title">Settings</div>
+      <div class="page-desc">Account and data management.</div>
+      <div class="card" style="max-width:440px;">
+        <div class="card-title" style="margin-bottom:16px;">🔑 Change Password</div>
+        <div class="form-group"><label>Current Password</label><input type="password" id="cur-pass"/></div>
+        <div class="form-group"><label>New Password</label><input type="password" id="new-pass"/></div>
+        <div class="form-group"><label>Confirm New Password</label><input type="password" id="conf-pass"/></div>
+        <button class="btn btn-primary" id="change-pass-btn">Update Password</button>
+      </div>
+      <div class="card" style="max-width:440px;margin-top:16px;">
+        <div class="card-title" style="margin-bottom:8px;">⚠️ Reset All Data</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">Reset all portfolio content to defaults. This cannot be undone.</p>
+        <button class="btn btn-danger" id="reset-btn">Reset to Defaults</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- EXPERIENCE MODAL -->
+<div class="modal-backdrop" id="exp-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="exp-modal-title">Add Experience</h3>
+      <button class="modal-close" data-close="exp-modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="form-group"><label>Date Range</label><input type="text" id="em-date" placeholder="Mar 2025 – Jun 2025"/></div>
+        <div class="form-group"><label>Badge Type</label>
+          <select id="em-badge">
+            <option value="intern">Intern Project</option>
+            <option value="personal">Personal Project</option>
+            <option value="academic">Academic Project</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Title</label><input type="text" id="em-title"/></div>
+      <div class="form-group"><label>Custom Badge Label</label><input type="text" id="em-badgeLabel"/></div>
+      <div class="form-group">
+        <label>Bullet Points</label>
+        <ul class="bullet-list" id="em-bullets"></ul>
+        <button class="btn btn-secondary btn-sm" id="add-bullet-btn" type="button">+ Add Bullet</button>
+      </div>
+      <div class="form-group">
+        <label>Links (Label | URL)</label>
+        <div id="em-links"></div>
+        <button class="btn btn-secondary btn-sm" id="add-link-btn" type="button">+ Add Link</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="exp-modal">Cancel</button>
+      <button class="btn btn-primary" id="save-exp-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT MODAL -->
+<div class="modal-backdrop" id="proj-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="proj-modal-title">Add Project</h3>
+      <button class="modal-close" data-close="proj-modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="form-group"><label>Icon (emoji)</label><input type="text" id="pm-icon" maxlength="4"/></div>
+        <div class="form-group"><label>Name</label><input type="text" id="pm-name"/></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="pm-desc" rows="3"></textarea></div>
+      <div class="form-group"><label>GitHub URL</label><input type="url" id="pm-github"/></div>
+      <div class="form-group">
+        <label>Tags (Label:color per line, color: green/orange/purple)</label>
+        <textarea id="pm-tags" rows="4" placeholder="OpenSearch:purple&#10;Wazuh:purple&#10;Docker"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="proj-modal">Cancel</button>
+      <button class="btn btn-primary" id="save-proj-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCHOOL MODAL -->
+<div class="modal-backdrop" id="school-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="school-modal-title">Add School Project</h3>
+      <button class="modal-close" data-close="school-modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="row2">
+        <div class="form-group"><label>Icon (emoji)</label><input type="text" id="sm-icon" maxlength="4"/></div>
+        <div class="form-group"><label>Subject</label><input type="text" id="sm-subject" placeholder="IoT, SE347, etc."/></div>
+      </div>
+      <div class="form-group"><label>Project Name</label><input type="text" id="sm-name"/></div>
+      <div class="form-group"><label>Description</label><textarea id="sm-desc" rows="3"></textarea></div>
+      <div class="form-group"><label>GitHub URL</label><input type="url" id="sm-github"/></div>
+      <div class="form-group"><label>GitHub Label (repo name)</label><input type="text" id="sm-label"/></div>
+      <div class="form-group">
+        <label>Tags (Label:color per line)</label>
+        <textarea id="sm-tags" rows="3" placeholder="Node.js&#10;MongoDB&#10;React:orange"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="school-modal">Cancel</button>
+      <button class="btn btn-primary" id="save-school-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="db.js"></script>
+<script>
+// ── Helpers ──────────────────────────────────────
+const $ = id => document.getElementById(id);
+const val = id => $(id).value.trim();
+
+let editingId = null;
+
+function toast(msg, isErr = false) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' error' : '') + ' show';
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+function uid() { return '_' + Math.random().toString(36).slice(2,9); }
+
+function parseTags(text) {
+  return text.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    const [label, color = ''] = l.split(':').map(s => s.trim());
+    return { label, color };
+  });
+}
+
+function tagsToText(tags) {
+  return tags.map(t => t.color ? `${t.label}:${t.color}` : t.label).join('\n');
+}
+
+// ── Auth ─────────────────────────────────────────
+if (PortfolioDB.isLoggedIn()) showApp();
+
+$('login-btn').onclick = () => {
+  const ok = PortfolioDB.login(val('login-user'), val('login-pass'));
+  if (ok) { $('login-err').style.display = 'none'; showApp(); }
+  else { $('login-err').style.display = 'block'; }
+};
+$('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') $('login-btn').click(); });
+$('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') $('login-pass').focus(); });
+
+$('logout-btn').onclick = e => { e.preventDefault(); PortfolioDB.logout(); location.reload(); };
+
+function showApp() {
+  $('login-screen').style.display = 'none';
+  $('app').style.display = 'flex';
+  loadAllSections();
+}
+
+// ── Navigation ───────────────────────────────────
+document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-' + btn.dataset.page).classList.add('active');
+  };
+});
+
+// ── Modals ───────────────────────────────────────
+document.querySelectorAll('[data-close]').forEach(el => {
+  el.onclick = () => closeModal(el.dataset.close);
+});
+document.querySelectorAll('.modal-backdrop').forEach(bd => {
+  bd.onclick = e => { if (e.target === bd) closeModal(bd.id); };
+});
+
+function openModal(id) { $(id).classList.add('open'); }
+function closeModal(id) { $(id).classList.remove('open'); editingId = null; }
+
+// ── Load All ─────────────────────────────────────
+function loadAllSections() {
+  const d = PortfolioDB.getData();
+  loadHero(d.hero);
+  loadStats(d.stats);
+  loadEdu(d.education);
+  loadSkills(d.skills);
+  loadExp(d.experience);
+  loadProjects(d.projects);
+  loadSchool(d.schoolProjects);
+}
+
+// ── HERO ─────────────────────────────────────────
+function loadHero(h) {
+  $('h-name').value = h.name;
+  $('h-role').value = h.role;
+  $('h-bio').value = h.bio;
+  $('h-email').value = h.email;
+  $('h-phone').value = h.phone || '';
+  $('h-github').value = h.github;
+  $('h-avatar').value = h.avatar;
+  $('h-open').checked = h.openToWork;
+  renderTagEditor(h.techTags);
+}
+
+let currentTags = [];
+function renderTagEditor(tags) {
+  currentTags = [...tags];
+  const editor = $('h-tags-editor');
+  const input = $('h-tag-input');
+  editor.querySelectorAll('.tag-chip').forEach(c => c.remove());
+  currentTags.forEach((tag, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${tag} <span class="tag-chip-del" data-i="${i}">✕</span>`;
+    editor.insertBefore(chip, input);
+  });
+  editor.querySelectorAll('.tag-chip-del').forEach(btn => {
+    btn.onclick = () => { currentTags.splice(+btn.dataset.i, 1); renderTagEditor(currentTags); };
+  });
+}
+$('h-tag-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.value.trim()) {
+    currentTags.push(e.target.value.trim()); e.target.value = '';
+    renderTagEditor(currentTags); e.preventDefault();
+  }
+});
+
+$('save-hero').onclick = () => {
+  const d = PortfolioDB.getData();
+  d.hero = { ...d.hero, name: val('h-name'), role: val('h-role'), bio: val('h-bio'),
+    email: val('h-email'), phone: val('h-phone'), github: val('h-github'),
+    avatar: val('h-avatar'), openToWork: $('h-open').checked, techTags: [...currentTags] };
+  PortfolioDB.saveData(d); toast('✅ Hero saved!');
+};
+
+// ── STATS ─────────────────────────────────────────
+function loadStats(stats) {
+  $('stats-list').innerHTML = stats.map((s, i) => `
+    <div class="card" style="margin:0;">
+      <div class="form-group"><label>Number / Label ${i+1}</label>
+        <input type="text" id="stat-num-${i}" value="${s.num}" placeholder="13+"/>
+      </div>
+      <div class="form-group"><label>Description</label>
+        <input type="text" id="stat-lbl-${i}" value="${s.label}" placeholder="Projects shipped"/>
+      </div>
+    </div>`).join('');
+}
+$('save-stats').onclick = () => {
+  const d = PortfolioDB.getData();
+  d.stats = d.stats.map((_, i) => ({ num: val(`stat-num-${i}`), label: val(`stat-lbl-${i}`) }));
+  PortfolioDB.saveData(d); toast('✅ Stats saved!');
+};
+
+// ── EDUCATION ─────────────────────────────────────
+function loadEdu(edu) {
+  $('edu-school').value = edu.school;
+  $('edu-major').value  = edu.major;
+  $('edu-years').value  = edu.years;
+  $('edu-gpa').value    = edu.gpa;
+  $('edu-url').value    = edu.transcriptUrl;
+}
+$('save-edu').onclick = () => {
+  const d = PortfolioDB.getData();
+  d.education = { school: val('edu-school'), major: val('edu-major'), years: val('edu-years'),
+                  gpa: val('edu-gpa'), transcriptUrl: val('edu-url') };
+  PortfolioDB.saveData(d); toast('✅ Education saved!');
+};
+
+// ── SKILLS ────────────────────────────────────────
+function loadSkills(skills) {
+  $('skills-list').innerHTML = '';
+  skills.forEach((g, gi) => {
+    const div = document.createElement('div');
+    div.className = 'skill-group-card';
+    div.innerHTML = `
+      <div class="sg-head-row">
+        <input type="text" id="sg-cat-${gi}" value="${g.category}" placeholder="Category name"/>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-secondary btn-sm" onclick="addSkillTag(${gi})">+ Tag</button>
+          <button class="btn btn-danger btn-sm" onclick="removeSkillGroup(${gi})">✕</button>
+        </div>
+      </div>
+      <div class="tag-editor" id="sg-tags-${gi}">
+        ${g.tags.map((t,ti) => `<span class="tag-chip">${t.label}${t.color ? ':'+t.color : ''} <span class="tag-chip-del" onclick="removeSkillTag(${gi},${ti})">✕</span></span>`).join('')}
+        <input type="text" id="sg-input-${gi}" placeholder="Tag:color" onkeydown="if(event.key==='Enter'){addSkillTag(${gi});event.preventDefault()}"/>
+      </div>`;
+    $('skills-list').appendChild(div);
+  });
+}
+function addSkillTag(gi) {
+  const input = $(`sg-input-${gi}`);
+  const val2 = input.value.trim();
+  if (!val2) return;
+  const d = PortfolioDB.getData();
+  const [label, color=''] = val2.split(':').map(s=>s.trim());
+  d.skills[gi].tags.push({ label, color });
+  PortfolioDB.saveData(d); loadSkills(d.skills);
+  setTimeout(() => { const el = $(`sg-input-${gi}`); if(el) el.focus(); }, 10);
+}
+function removeSkillTag(gi, ti) {
+  const d = PortfolioDB.getData(); d.skills[gi].tags.splice(ti,1);
+  PortfolioDB.saveData(d); loadSkills(d.skills);
+}
+function removeSkillGroup(gi) {
+  const d = PortfolioDB.getData(); d.skills.splice(gi,1);
+  PortfolioDB.saveData(d); loadSkills(d.skills);
+}
+$('add-skill-group').onclick = () => {
+  const d = PortfolioDB.getData();
+  d.skills.push({ id: uid(), category: 'New Category', tags: [] });
+  PortfolioDB.saveData(d); loadSkills(d.skills);
+};
+$('save-skills').onclick = () => {
+  const d = PortfolioDB.getData();
+  d.skills.forEach((g, gi) => { const el = $(`sg-cat-${gi}`); if(el) g.category = el.value.trim(); });
+  PortfolioDB.saveData(d); toast('✅ Skills saved!');
+};
+
+// ── EXPERIENCE ────────────────────────────────────
+function loadExp(exp) {
+  $('exp-list').innerHTML = '';
+  exp.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="card-title">${e.title}</div>
+          <div class="card-meta">${e.date} &nbsp;·&nbsp; <span class="badge ${e.badge}">${e.badgeLabel}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="editExp('${e.id}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteExp('${e.id}')">🗑</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);">${e.bullets.length} bullet(s) · ${e.links.length} link(s)</div>`;
+    $('exp-list').appendChild(div);
+  });
+}
+$('add-exp-btn').onclick = () => openExpModal(null);
+function openExpModal(id) {
+  editingId = id;
+  const isNew = !id;
+  $('exp-modal-title').textContent = isNew ? 'Add Experience' : 'Edit Experience';
+  if (!isNew) {
+    const e = PortfolioDB.getData().experience.find(x => x.id === id);
+    $('em-date').value = e.date; $('em-title').value = e.title;
+    $('em-badge').value = e.badge; $('em-badgeLabel').value = e.badgeLabel;
+    renderBullets(e.bullets); renderLinks(e.links);
+  } else {
+    $('em-date').value=''; $('em-title').value='';
+    $('em-badge').value='intern'; $('em-badgeLabel').value='Intern Project';
+    renderBullets([]); renderLinks([]);
+  }
+  openModal('exp-modal');
+}
+function renderBullets(bullets) {
+  $('em-bullets').innerHTML = bullets.map((b,i) => `
+    <li class="bullet-item">
+      <textarea rows="2">${b}</textarea>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('li').remove()">✕</button>
+    </li>`).join('');
+}
+function renderLinks(links) {
+  $('em-links').innerHTML = links.map((l,i) => `
+    <div class="link-item">
+      <input type="text" value="${l.label}" placeholder="Label"/>
+      <input type="url" value="${l.url}" placeholder="https://github.com/…"/>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.link-item').remove()">✕</button>
+    </div>`).join('');
+}
+$('add-bullet-btn').onclick = () => {
+  const li = document.createElement('li'); li.className = 'bullet-item';
+  li.innerHTML = `<textarea rows="2"></textarea><button class="btn btn-danger btn-sm" onclick="this.closest('li').remove()">✕</button>`;
+  $('em-bullets').appendChild(li);
+};
+$('add-link-btn').onclick = () => {
+  const div = document.createElement('div'); div.className = 'link-item';
+  div.innerHTML = `<input type="text" placeholder="Label"/><input type="url" placeholder="https://github.com/…"/><button class="btn btn-danger btn-sm" onclick="this.closest('.link-item').remove()">✕</button>`;
+  $('em-links').appendChild(div);
+};
+$('save-exp-btn').onclick = () => {
+  const d = PortfolioDB.getData();
+  const bullets = [...$('em-bullets').querySelectorAll('textarea')].map(t=>t.value.trim()).filter(Boolean);
+  const linkEls = [...$('em-links').querySelectorAll('.link-item')];
+  const links = linkEls.map(el => {
+    const ins = el.querySelectorAll('input');
+    return { label: ins[0].value.trim(), url: ins[1].value.trim() };
+  }).filter(l=>l.label||l.url);
+  const item = { id: editingId || uid(), date: val('em-date'), title: val('em-title'),
+    badge: $('em-badge').value, badgeLabel: val('em-badgeLabel'), bullets, links };
+  if (editingId) { const i = d.experience.findIndex(x=>x.id===editingId); d.experience[i]=item; }
+  else d.experience.unshift(item);
+  PortfolioDB.saveData(d); loadExp(d.experience); closeModal('exp-modal'); toast('✅ Experience saved!');
+};
+function deleteExp(id) {
+  if (!confirm('Delete this entry?')) return;
+  const d = PortfolioDB.getData(); d.experience = d.experience.filter(x=>x.id!==id);
+  PortfolioDB.saveData(d); loadExp(d.experience); toast('🗑 Deleted');
+}
+function editExp(id) { openExpModal(id); }
+
+// ── PROJECTS ──────────────────────────────────────
+function loadProjects(projects) {
+  $('proj-list').innerHTML = '';
+  projects.forEach(p => {
+    const div = document.createElement('div'); div.className = 'card';
+    div.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="card-title">${p.icon} ${p.name}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">${p.tags.map(t=>`<span class="tag-chip">${t.label}</span>`).join('')}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="editProj('${p.id}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProj('${p.id}')">🗑</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);">${p.desc.slice(0,100)}…</div>`;
+    $('proj-list').appendChild(div);
+  });
+}
+$('add-proj-btn').onclick = () => openProjModal(null);
+function openProjModal(id) {
+  editingId = id;
+  $('proj-modal-title').textContent = id ? 'Edit Project' : 'Add Project';
+  if (id) {
+    const p = PortfolioDB.getData().projects.find(x=>x.id===id);
+    $('pm-icon').value=p.icon; $('pm-name').value=p.name;
+    $('pm-desc').value=p.desc; $('pm-github').value=p.github;
+    $('pm-tags').value=tagsToText(p.tags);
+  } else {
+    $('pm-icon').value='⚙️'; $('pm-name').value=''; $('pm-desc').value=''; $('pm-github').value=''; $('pm-tags').value='';
+  }
+  openModal('proj-modal');
+}
+$('save-proj-btn').onclick = () => {
+  const d = PortfolioDB.getData();
+  const item = { id: editingId||uid(), icon: val('pm-icon'), name: val('pm-name'),
+    desc: val('pm-desc'), github: val('pm-github'), tags: parseTags($('pm-tags').value) };
+  if (editingId) { const i = d.projects.findIndex(x=>x.id===editingId); d.projects[i]=item; }
+  else d.projects.unshift(item);
+  PortfolioDB.saveData(d); loadProjects(d.projects); closeModal('proj-modal'); toast('✅ Project saved!');
+};
+function deleteProj(id) {
+  if (!confirm('Delete this project?')) return;
+  const d = PortfolioDB.getData(); d.projects = d.projects.filter(x=>x.id!==id);
+  PortfolioDB.saveData(d); loadProjects(d.projects); toast('🗑 Deleted');
+}
+function editProj(id) { openProjModal(id); }
+
+// ── SCHOOL ────────────────────────────────────────
+function loadSchool(projects) {
+  $('school-list').innerHTML = '';
+  projects.forEach(p => {
+    const div = document.createElement('div'); div.className = 'card';
+    div.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="card-title">${p.icon} ${p.name}</div>
+          <div class="card-meta">${p.subject}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="editSchool('${p.id}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteSchool('${p.id}')">🗑</button>
+        </div>
+      </div>`;
+    $('school-list').appendChild(div);
+  });
+}
+$('add-school-btn').onclick = () => openSchoolModal(null);
+function openSchoolModal(id) {
+  editingId = id;
+  $('school-modal-title').textContent = id ? 'Edit School Project' : 'Add School Project';
+  if (id) {
+    const p = PortfolioDB.getData().schoolProjects.find(x=>x.id===id);
+    $('sm-icon').value=p.icon; $('sm-subject').value=p.subject; $('sm-name').value=p.name;
+    $('sm-desc').value=p.desc; $('sm-github').value=p.github;
+    $('sm-label').value=p.githubLabel||''; $('sm-tags').value=tagsToText(p.tags);
+  } else {
+    ['sm-icon','sm-subject','sm-name','sm-desc','sm-github','sm-label','sm-tags'].forEach(id=>$(id).value='');
+    $('sm-icon').value='📂';
+  }
+  openModal('school-modal');
+}
+$('save-school-btn').onclick = () => {
+  const d = PortfolioDB.getData();
+  const item = { id: editingId||uid(), icon: val('sm-icon'), subject: val('sm-subject'),
+    name: val('sm-name'), desc: val('sm-desc'), github: val('sm-github'),
+    githubLabel: val('sm-label'), tags: parseTags($('sm-tags').value) };
+  if (editingId) { const i = d.schoolProjects.findIndex(x=>x.id===editingId); d.schoolProjects[i]=item; }
+  else d.schoolProjects.unshift(item);
+  PortfolioDB.saveData(d); loadSchool(d.schoolProjects); closeModal('school-modal'); toast('✅ School project saved!');
+};
+function deleteSchool(id) {
+  if (!confirm('Delete this project?')) return;
+  const d = PortfolioDB.getData(); d.schoolProjects = d.schoolProjects.filter(x=>x.id!==id);
+  PortfolioDB.saveData(d); loadSchool(d.schoolProjects); toast('🗑 Deleted');
+}
+function editSchool(id) { openSchoolModal(id); }
+
+// ── SETTINGS ──────────────────────────────────────
+$('change-pass-btn').onclick = () => {
+  const cur = $('cur-pass').value, nw = $('new-pass').value, cf = $('conf-pass').value;
+  if (!cur||!nw||!cf) return toast('Fill all fields', true);
+  if (nw !== cf) return toast('New passwords do not match', true);
+  if (nw.length < 6) return toast('Password must be at least 6 chars', true);
+  if (PortfolioDB.changePassword(cur, nw)) { toast('✅ Password updated!'); $('cur-pass').value=$('new-pass').value=$('conf-pass').value=''; }
+  else toast('Current password is incorrect', true);
+};
+$('reset-btn').onclick = () => {
+  if (!confirm('Reset ALL portfolio data to defaults? This cannot be undone.')) return;
+  PortfolioDB.resetData(); loadAllSections(); toast('↩ Data reset to defaults');
+};
+</script>
+</body>
+</html>

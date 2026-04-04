@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -71,89 +71,18 @@
   </section>
 
   <!-- STATS -->
-  <div class="stats">
-    <div class="stat"><div class="stat-num">13+</div><div class="stat-label">Projects shipped</div></div>
-    <div class="stat"><div class="stat-num">9.0</div><div class="stat-label">GPA / 10</div></div>
-    <div class="stat"><div class="stat-num">UIT</div><div class="stat-label">2022 – 2026</div></div>
-  </div>
+  <div class="stats" id="stats-section"></div>
 
   <!-- EDUCATION -->
   <section class="section" id="education">
     <div class="sec-title">Education</div>
-    <div class="edu-card">
-      <div>
-        <div class="edu-school">University of Information Technology (UIT)</div>
-        <div class="edu-major">Computer Networking and Data Communication &nbsp;·&nbsp; 2022 – 2026</div>
-      </div>
-      <div class="edu-right">
-        <div class="edu-gpa">9.0 / 10</div>
-        <div class="edu-gpa-label">GPA</div>
-        <a href="https://drive.google.com/drive/u/0/folders/1xKMrto-ASyM-d_nPMrZH9UWiTsmyk_X5"
-           target="_blank" class="edu-transcript">📄 View transcript</a>
-      </div>
-    </div>
+    <div class="edu-card"></div>
   </section>
 
   <!-- SKILLS -->
   <section class="section" id="skills">
     <div class="sec-title">Tech stack</div>
-    <div class="skill-grid">
-      <div class="skill-group" data-cat="cloud">
-        <div class="sg-head">Cloud &amp; Infrastructure</div>
-        <div class="tags">
-          <span class="tag">AWS EC2</span>
-          <span class="tag">AWS ELB</span>
-          <span class="tag">Auto Scaling</span>
-          <span class="tag">CodeDeploy</span>
-        </div>
-      </div>
-      <div class="skill-group" data-cat="containers">
-        <div class="sg-head">Containers &amp; Orchestration</div>
-        <div class="tags">
-          <span class="tag">Docker</span>
-          <span class="tag">Kubernetes</span>
-          <span class="tag green">Helm</span>
-          <span class="tag green">ArgoCD</span>
-        </div>
-      </div>
-      <div class="skill-group" data-cat="cicd">
-        <div class="sg-head">CI/CD &amp; IaC</div>
-        <div class="tags">
-          <span class="tag">Jenkins</span>
-          <span class="tag">GitHub Actions</span>
-          <span class="tag orange">Terraform</span>
-        </div>
-      </div>
-      <div class="skill-group" data-cat="monitoring">
-        <div class="sg-head">Monitoring &amp; Security</div>
-        <div class="tags">
-          <span class="tag">Prometheus</span>
-          <span class="tag">Grafana</span>
-          <span class="tag purple">Trivy</span>
-          <span class="tag purple">SonarQube</span>
-          <span class="tag purple">Wazuh</span>
-        </div>
-      </div>
-      <div class="skill-group" data-cat="siem">
-        <div class="sg-head">SIEM &amp; Logging</div>
-        <div class="tags">
-          <span class="tag">OpenSearch</span>
-          <span class="tag">Vector (VRL)</span>
-          <span class="tag green">ECS</span>
-          <span class="tag green">NGINX</span>
-        </div>
-      </div>
-      <div class="skill-group" data-cat="lang">
-        <div class="sg-head">Languages &amp; OS</div>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">TypeScript</span>
-          <span class="tag">Groovy</span>
-          <span class="tag">YAML</span>
-          <span class="tag orange">Ubuntu</span>
-        </div>
-      </div>
-    </div>
+    <div class="skill-grid"></div>
   </section>
 
   <!-- EXPERIENCE -->
@@ -161,7 +90,8 @@
     <div class="sec-title">Experience</div>
     <div class="timeline">
 
-      <div class="exp-card">
+      <!-- rendered by db.js -->
+      <div class="exp-card" style="display:none">
         <div class="exp-card-header">
           <div class="exp-header-left">
             <div class="exp-date">Aug 2025 – Feb 2026</div>
@@ -225,235 +155,19 @@
         </div>
       </div>
 
-      <div class="exp-card">
-        <div class="exp-card-header">
-          <div class="exp-header-left">
-            <div class="exp-date">Mar 2025 – May 2025</div>
-            <div class="exp-title">Automated Website Deployment on AWS</div>
-          </div>
-          <span class="exp-badge academic">Academic Project</span>
-        </div>
-        <div class="exp-card-body">
-          <ul class="exp-bullets">
-            <li>Developed a student management web application and provisioned cloud infrastructure on AWS with Terraform.</li>
-            <li>Leveraged AWS native CI/CD tools: CodeCommit, CodeBuild, and CodeDeploy for automated deployments.</li>
-            <li>Implemented high availability using Elastic Load Balancer and Auto Scaling Groups.</li>
-          </ul>
-          <div class="exp-links">
-            <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="exp-link">⎇ infrastructure_devops</a>
-            <a href="https://github.com/Lghthien/Source-Dev-ops" target="_blank" class="exp-link">⎇ Source-Dev-ops</a>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
   <!-- PROJECTS -->
   <section class="section" id="projects">
     <div class="sec-title">Featured projects</div>
-    <div class="proj-grid">
-
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <div class="proj-icon">🛡️</div>
-        </div>
-        <div class="proj-name">Open-Source SIEM System</div>
-        <div class="proj-desc">Full SIEM platform with OpenSearch + Wazuh + Vector. HA cluster, multi-source log pipelines, ECS normalization, and automated agent deployment.</div>
-        <div class="tags" style="margin-bottom:14px;">
-          <span class="tag purple">OpenSearch</span><span class="tag purple">Wazuh</span><span class="tag">Docker</span>
-        </div>
-        <div class="proj-footer">
-          <a href="https://github.com/Lghthien/Deploy-SIEM-opensource" target="_blank" class="proj-gh">↗ View on GitHub</a>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <div class="proj-icon">🔒</div>
-        </div>
-        <div class="proj-name">NGINX CIS Benchmark Tool</div>
-        <div class="proj-desc">Automated hardening & auditing tool for NGINX on Ubuntu via SSH. 40+ CIS checks, SSL automation, backup/rollback, JSON compliance reports.</div>
-        <div class="tags" style="margin-bottom:14px;">
-          <span class="tag orange">Python</span><span class="tag green">NGINX</span><span class="tag">Ubuntu</span>
-        </div>
-        <div class="proj-footer">
-          <a href="https://github.com/Lghthien/Nginx_automation" target="_blank" class="proj-gh">↗ View on GitHub</a>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <div class="proj-icon">⚙️</div>
-        </div>
-        <div class="proj-name">Full DevSecOps Pipeline</div>
-        <div class="proj-desc">End-to-end CI/CD for a NestJS + NextJS app on AWS EKS. Jenkins + Trivy + SonarQube + ArgoCD + Prometheus/Grafana stack.</div>
-        <div class="tags" style="margin-bottom:14px;">
-          <span class="tag">Jenkins</span><span class="tag green">ArgoCD</span><span class="tag orange">Terraform</span>
-        </div>
-        <div class="proj-footer">
-          <a href="https://github.com/Lghthien/CI-dacn" target="_blank" class="proj-gh">↗ View on GitHub</a>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <div class="proj-icon">☁️</div>
-        </div>
-        <div class="proj-name">AWS Infrastructure Automation</div>
-        <div class="proj-desc">Student management app deployed on AWS with Terraform IaC, CodePipeline CI/CD, Elastic Load Balancer, and Auto Scaling for high availability.</div>
-        <div class="tags" style="margin-bottom:14px;">
-          <span class="tag orange">Terraform</span><span class="tag">AWS</span><span class="tag">CodeDeploy</span>
-        </div>
-        <div class="proj-footer">
-          <a href="https://github.com/Lghthien/infrastructure_devops" target="_blank" class="proj-gh">↗ View on GitHub</a>
-        </div>
-      </div>
-
-    </div>
+    <div class="proj-grid"></div>
   </section>
 
   <!-- SCHOOL PROJECTS -->
   <section class="section" id="school-projects">
     <div class="sec-title">Academic &amp; school projects</div>
-    <div class="school-grid">
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">📚</span>
-          <span class="school-subject">Intro to SE</span>
-        </div>
-        <div class="school-name">Library Management Website</div>
-        <div class="school-desc">Full-stack web application for managing library books, readers, loans, and fines. Built as the capstone for Introduction to Software Engineering.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">JavaScript</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/library-management-website" target="_blank" class="school-gh">↗ library-management-website</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">🌱</span>
-          <span class="school-subject">IoT</span>
-        </div>
-        <div class="school-name">Gardenice – Smart Garden IoT</div>
-        <div class="school-desc">IoT system to monitor and automate a smart garden: soil moisture, temperature, automated watering, and a mobile dashboard for control.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag orange">ESP32</span><span class="tag green">MQTT</span><span class="tag">Python</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/Gardenice-IoT" target="_blank" class="school-gh">↗ Gardenice-IoT</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">🌐</span>
-          <span class="school-subject">SDN / Programmable Networks</span>
-        </div>
-        <div class="school-name">SDN Multi-Access-Point Controller</div>
-        <div class="school-desc">Software-Defined Networking project implementing a centralised controller managing multiple Wi-Fi access points with dynamic flow routing.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag purple">OpenFlow</span><span class="tag">Ryu SDN</span><span class="tag">Python</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/SDN_multi-access-point" target="_blank" class="school-gh">↗ SDN_multi-access-point</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">🏨</span>
-          <span class="school-subject">Network Design</span>
-        </div>
-        <div class="school-name">Resort Network Design Project</div>
-        <div class="school-desc">End-to-end enterprise network design for a resort: VLAN segmentation, inter-VLAN routing, redundancy with STP/HSRP, and firewall policies.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag">Cisco</span><span class="tag orange">VLAN</span><span class="tag">OSPF</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/Network-Design-Project-Resort" target="_blank" class="school-gh">↗ Network-Design-Project-Resort</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">📱</span>
-          <span class="school-subject">Mobile App</span>
-        </div>
-        <div class="school-name">English Manager App</div>
-        <div class="school-desc">Mobile application for learning and managing English vocabulary. Features flashcards, progress tracking, and quiz modes built for Android.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag green">Android</span><span class="tag">Java</span><span class="tag">SQLite</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/App_EnglishManager" target="_blank" class="school-gh">↗ App_EnglishManager</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">🗺️</span>
-          <span class="school-subject">SE347 – Software Engineering</span>
-        </div>
-        <div class="school-name">SE347 Learning Roadmap</div>
-        <div class="school-desc">Web platform providing structured learning roadmaps and resources for software engineering topics, built as a team project for SE347.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag orange">REST API</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/SE347_Roadmap" target="_blank" class="school-gh">↗ SE347_Roadmap</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">⚙️</span>
-          <span class="school-subject">NT548 – DevOps</span>
-        </div>
-        <div class="school-name">NT548 DevOps Lab Practice</div>
-        <div class="school-desc">Hands-on DevOps lab exercises covering Docker, Kubernetes, CI/CD pipelines, and infrastructure-as-code using Terraform and GitHub Actions.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag orange">Terraform</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/NT548-DevOps-ThucHanh" target="_blank" class="school-gh">↗ NT548-DevOps-ThucHanh</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">🎲</span>
-          <span class="school-subject">Basic Network Programming</span>
-        </div>
-        <div class="school-name">Monopoly WinForms (LAN)</div>
-        <div class="school-desc">Multiplayer Monopoly board game built in C# WinForms with real-time LAN networking using TCP/IP sockets for peer-to-peer game state synchronisation.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag purple">C#</span><span class="tag">WinForms</span><span class="tag green">TCP/IP</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/Monopoly_winform" target="_blank" class="school-gh">↗ Monopoly_winform</a>
-        </div>
-      </div>
-
-      <div class="school-card">
-        <div class="school-card-header">
-          <span class="school-icon">🖥️</span>
-          <span class="school-subject">Network Programming</span>
-        </div>
-        <div class="school-name">Remote Desktop Tool</div>
-        <div class="school-desc">Custom remote desktop application allowing real-time screen sharing and keyboard/mouse control over a local network using socket programming in C#.</div>
-        <div class="tags" style="margin-bottom:4px;">
-          <span class="tag purple">C#</span><span class="tag">Sockets</span><span class="tag">RDP</span>
-        </div>
-        <div class="school-footer">
-          <a href="https://github.com/Lghthien/remotedesktop" target="_blank" class="school-gh">↗ remotedesktop</a>
-        </div>
-      </div>
-
-    </div>
+    <div class="school-grid"></div>
   </section>
 
   <!-- CONTACT -->
@@ -539,6 +253,7 @@
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
+<script src="db.js"></script>
 <script src="main.js" defer></script>
 
 </body>

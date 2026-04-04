@@ -1,11 +1,16 @@
 (function () {
+  /* ── 0. RENDER FROM DATABASE ── */
+  if (typeof PortfolioDB !== 'undefined') {
+    PortfolioDB.render();
+  }
+
   /* ── 1. SCROLL REVEAL ── */
   const STAGGER = 0.09;
   const GROUPS = [
     { sel: '.stat',        stagger: STAGGER, cap: 0.28 },
     { sel: '.edu-card',    stagger: 0,       cap: 0    },
     { sel: '.skill-group', stagger: STAGGER, cap: 0.5  },
-    { sel: '.exp-card',    stagger: STAGGER, cap: 0.28 },
+    { sel: '.exp-card:not([style*="display:none"])', stagger: STAGGER, cap: 0.28 },
     { sel: '.proj-card',   stagger: STAGGER, cap: 0.28 },
     { sel: '.school-card', stagger: 0.07,    cap: 0.32 },
     { sel: '.contact-box', stagger: 0,       cap: 0    },
