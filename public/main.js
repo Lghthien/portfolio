@@ -1,7 +1,11 @@
-(function () {
+(async function () {
   /* ── 0. RENDER FROM DATABASE ── */
   if (typeof PortfolioDB !== 'undefined') {
-    PortfolioDB.render();
+    try {
+      await PortfolioDB.render();
+    } catch (err) {
+      console.error('Failed to load portfolio data from backend:', err);
+    }
   }
 
   /* ── 1. SCROLL REVEAL ── */

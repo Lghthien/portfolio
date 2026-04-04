@@ -25,22 +25,29 @@ function tagsToText(tags) {
 }
 
 // ── Auth ─────────────────────────────────────────
-if (PortfolioDB.isLoggedIn()) showApp();
+(async () => {
+  const loggedIn = await PortfolioDB.isLoggedIn();
+  if (loggedIn) showApp();
+})();
 
-$('login-btn').onclick = () => {
-  const ok = PortfolioDB.login(val('login-user'), val('login-pass'));
+$('login-btn').onclick = async () => {
+  const ok = await PortfolioDB.login(val('login-user'), val('login-pass'));
   if (ok) { $('login-err').style.display = 'none'; showApp(); }
   else { $('login-err').style.display = 'block'; }
 };
 $('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') $('login-btn').click(); });
 $('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') $('login-pass').focus(); });
 
-$('logout-btn').onclick = e => { e.preventDefault(); PortfolioDB.logout(); location.reload(); };
+$('logout-btn').onclick = async e => {
+  e.preventDefault();
+  await PortfolioDB.logout();
+  location.reload();
+};
 
-function showApp() {
+async function showApp() {
   $('login-screen').style.display = 'none';
   $('app').style.display = 'flex';
-  loadAllSections();
+  await loadAllSections();
 }
 
 // ── Navigation ───────────────────────────────────
@@ -65,8 +72,8 @@ function openModal(id) { $(id).classList.add('open'); }
 function closeModal(id) { $(id).classList.remove('open'); editingId = null; }
 
 // ── Load All ─────────────────────────────────────
-function loadAllSections() {
-  const d = PortfolioDB.getData();
+async function loadAllSections() {
+  const d = await PortfolioDB.fetchData();
   loadHero(d.hero);
   loadStats(d.stats);
   loadEdu(d.education);
@@ -112,12 +119,15 @@ $('h-tag-input').addEventListener('keydown', e => {
   }
 });
 
-$('save-hero').onclick = () => {
+$('save-hero').onclick = async () => {
   const d = PortfolioDB.getData();
   d.hero = { ...d.hero, name: val('h-name'), role: val('h-role'), bio: val('h-bio'),
     email: val('h-email'), phone: val('h-phone'), github: val('h-github'),
     avatar: val('h-avatar'), openToWork: $('h-open').checked, techTags: [...currentTags] };
-  PortfolioDB.saveData(d); toast('✅ Hero saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    toast('✅ Hero saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 
 // ── STATS ─────────────────────────────────────────
@@ -132,10 +142,13 @@ function loadStats(stats) {
       </div>
     </div>`).join('');
 }
-$('save-stats').onclick = () => {
+$('save-stats').onclick = async () => {
   const d = PortfolioDB.getData();
   d.stats = d.stats.map((_, i) => ({ num: val(`stat-num-${i}`), label: val(`stat-lbl-${i}`) }));
-  PortfolioDB.saveData(d); toast('✅ Stats saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    toast('✅ Stats saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 
 // ── EDUCATION ─────────────────────────────────────
@@ -146,11 +159,14 @@ function loadEdu(edu) {
   $('edu-gpa').value    = edu.gpa;
   $('edu-url').value    = edu.transcriptUrl;
 }
-$('save-edu').onclick = () => {
+$('save-edu').onclick = async () => {
   const d = PortfolioDB.getData();
   d.education = { school: val('edu-school'), major: val('edu-major'), years: val('edu-years'),
                   gpa: val('edu-gpa'), transcriptUrl: val('edu-url') };
-  PortfolioDB.saveData(d); toast('✅ Education saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    toast('✅ Education saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 
 // ── SKILLS ────────────────────────────────────────
@@ -174,33 +190,36 @@ function loadSkills(skills) {
     $('skills-list').appendChild(div);
   });
 }
-function addSkillTag(gi) {
+async function addSkillTag(gi) {
   const input = $(`sg-input-${gi}`);
   const val2 = input.value.trim();
   if (!val2) return;
   const d = PortfolioDB.getData();
   const [label, color=''] = val2.split(':').map(s=>s.trim());
   d.skills[gi].tags.push({ label, color });
-  PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveData(d); loadSkills(d.skills);
   setTimeout(() => { const el = $(`sg-input-${gi}`); if(el) el.focus(); }, 10);
 }
-function removeSkillTag(gi, ti) {
+async function removeSkillTag(gi, ti) {
   const d = PortfolioDB.getData(); d.skills[gi].tags.splice(ti,1);
-  PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveData(d); loadSkills(d.skills);
 }
-function removeSkillGroup(gi) {
+async function removeSkillGroup(gi) {
   const d = PortfolioDB.getData(); d.skills.splice(gi,1);
-  PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveData(d); loadSkills(d.skills);
 }
-$('add-skill-group').onclick = () => {
+$('add-skill-group').onclick = async () => {
   const d = PortfolioDB.getData();
   d.skills.push({ id: uid(), category: 'New Category', tags: [] });
-  PortfolioDB.saveData(d); loadSkills(d.skills);
+  await PortfolioDB.saveData(d); loadSkills(d.skills);
 };
-$('save-skills').onclick = () => {
+$('save-skills').onclick = async () => {
   const d = PortfolioDB.getData();
   d.skills.forEach((g, gi) => { const el = $(`sg-cat-${gi}`); if(el) g.category = el.value.trim(); });
-  PortfolioDB.saveData(d); toast('✅ Skills saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    toast('✅ Skills saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
 
 // ── EXPERIENCE ────────────────────────────────────
@@ -266,7 +285,7 @@ $('add-link-btn').onclick = () => {
   div.innerHTML = `<input type="text" placeholder="Label"/><input type="url" placeholder="https://github.com/…"/><button class="btn btn-danger btn-sm" onclick="this.closest('.link-item').remove()">✕</button>`;
   $('em-links').appendChild(div);
 };
-$('save-exp-btn').onclick = () => {
+$('save-exp-btn').onclick = async () => {
   const d = PortfolioDB.getData();
   const bullets = [...$('em-bullets').querySelectorAll('textarea')].map(t=>t.value.trim()).filter(Boolean);
   const linkEls = [...$('em-links').querySelectorAll('.link-item')];
@@ -278,12 +297,18 @@ $('save-exp-btn').onclick = () => {
     badge: $('em-badge').value, badgeLabel: val('em-badgeLabel'), bullets, links };
   if (editingId) { const i = d.experience.findIndex(x=>x.id===editingId); d.experience[i]=item; }
   else d.experience.unshift(item);
-  PortfolioDB.saveData(d); loadExp(d.experience); closeModal('exp-modal'); toast('✅ Experience saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    loadExp(d.experience); closeModal('exp-modal'); toast('✅ Experience saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
-function deleteExp(id) {
+async function deleteExp(id) {
   if (!confirm('Delete this entry?')) return;
   const d = PortfolioDB.getData(); d.experience = d.experience.filter(x=>x.id!==id);
-  PortfolioDB.saveData(d); loadExp(d.experience); toast('🗑 Deleted');
+  try {
+    await PortfolioDB.saveData(d);
+    loadExp(d.experience); toast('🗑 Deleted');
+  } catch(e) { toast('❌ Delete failed', true); }
 }
 function editExp(id) { openExpModal(id); }
 
@@ -321,18 +346,24 @@ function openProjModal(id) {
   }
   openModal('proj-modal');
 }
-$('save-proj-btn').onclick = () => {
+$('save-proj-btn').onclick = async () => {
   const d = PortfolioDB.getData();
   const item = { id: editingId||uid(), icon: val('pm-icon'), name: val('pm-name'),
     desc: val('pm-desc'), github: val('pm-github'), tags: parseTags($('pm-tags').value) };
   if (editingId) { const i = d.projects.findIndex(x=>x.id===editingId); d.projects[i]=item; }
   else d.projects.unshift(item);
-  PortfolioDB.saveData(d); loadProjects(d.projects); closeModal('proj-modal'); toast('✅ Project saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    loadProjects(d.projects); closeModal('proj-modal'); toast('✅ Project saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
-function deleteProj(id) {
+async function deleteProj(id) {
   if (!confirm('Delete this project?')) return;
   const d = PortfolioDB.getData(); d.projects = d.projects.filter(x=>x.id!==id);
-  PortfolioDB.saveData(d); loadProjects(d.projects); toast('🗑 Deleted');
+  try {
+    await PortfolioDB.saveData(d);
+    loadProjects(d.projects); toast('🗑 Deleted');
+  } catch(e) { toast('❌ Delete failed', true); }
 }
 function editProj(id) { openProjModal(id); }
 
@@ -370,32 +401,45 @@ function openSchoolModal(id) {
   }
   openModal('school-modal');
 }
-$('save-school-btn').onclick = () => {
+$('save-school-btn').onclick = async () => {
   const d = PortfolioDB.getData();
   const item = { id: editingId||uid(), icon: val('sm-icon'), subject: val('sm-subject'),
     name: val('sm-name'), desc: val('sm-desc'), github: val('sm-github'),
     githubLabel: val('sm-label'), tags: parseTags($('sm-tags').value) };
   if (editingId) { const i = d.schoolProjects.findIndex(x=>x.id===editingId); d.schoolProjects[i]=item; }
   else d.schoolProjects.unshift(item);
-  PortfolioDB.saveData(d); loadSchool(d.schoolProjects); closeModal('school-modal'); toast('✅ School project saved!');
+  try {
+    await PortfolioDB.saveData(d);
+    loadSchool(d.schoolProjects); closeModal('school-modal'); toast('✅ School project saved!');
+  } catch(e) { toast('❌ Save failed: ' + e.message, true); }
 };
-function deleteSchool(id) {
+async function deleteSchool(id) {
   if (!confirm('Delete this project?')) return;
   const d = PortfolioDB.getData(); d.schoolProjects = d.schoolProjects.filter(x=>x.id!==id);
-  PortfolioDB.saveData(d); loadSchool(d.schoolProjects); toast('🗑 Deleted');
+  try {
+    await PortfolioDB.saveData(d);
+    loadSchool(d.schoolProjects); toast('🗑 Deleted');
+  } catch(e) { toast('❌ Delete failed', true); }
 }
 function editSchool(id) { openSchoolModal(id); }
 
 // ── SETTINGS ──────────────────────────────────────
-$('change-pass-btn').onclick = () => {
+$('change-pass-btn').onclick = async () => {
   const cur = $('cur-pass').value, nw = $('new-pass').value, cf = $('conf-pass').value;
   if (!cur||!nw||!cf) return toast('Fill all fields', true);
   if (nw !== cf) return toast('New passwords do not match', true);
   if (nw.length < 6) return toast('Password must be at least 6 chars', true);
-  if (PortfolioDB.changePassword(cur, nw)) { toast('✅ Password updated!'); $('cur-pass').value=$('new-pass').value=$('conf-pass').value=''; }
-  else toast('Current password is incorrect', true);
+  const ok = await PortfolioDB.changePassword(cur, nw);
+  if (ok) {
+    toast('✅ Password updated! Please log in again.');
+    setTimeout(() => { PortfolioDB.logout(); location.reload(); }, 1500);
+  } else toast('Current password is incorrect', true);
 };
-$('reset-btn').onclick = () => {
+$('reset-btn').onclick = async () => {
   if (!confirm('Reset ALL portfolio data to defaults? This cannot be undone.')) return;
-  PortfolioDB.resetData(); loadAllSections(); toast('↩ Data reset to defaults');
+  try {
+    await PortfolioDB.resetData();
+    await loadAllSections();
+    toast('↩ Data reset to defaults');
+  } catch(e) { toast('❌ Reset failed: ' + e.message, true); }
 };
