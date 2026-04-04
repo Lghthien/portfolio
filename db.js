@@ -13,7 +13,7 @@ const PortfolioDB = (() => {
   // Default credentials
   const CREDS = {
     username: 'admin',
-    get password() { return localStorage.getItem(PASS_KEY) || 'lght@2026'; }
+    get password() { return localStorage.getItem(PASS_KEY) || 'Thien@123'; }
   };
 
   // ─────────────────────────────────────────
