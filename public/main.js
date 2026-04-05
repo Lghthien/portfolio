@@ -8,6 +8,13 @@
     }
   }
 
+  /* ── 0.1 HIDE LOADER ── */
+  const loader = document.getElementById('loader');
+  if (loader) {
+    loader.style.opacity = '0';
+    setTimeout(() => loader.remove(), 500);
+  }
+
   /* ── 1. SCROLL REVEAL ── */
   const STAGGER = 0.09;
   const GROUPS = [
